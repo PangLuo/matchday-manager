@@ -1,0 +1,180 @@
+# Implementation Plan: World Cup 2026 Team Manager
+
+**Branch**: `001-worldcup-manager` | **Date**: 2026-07-07 | **Spec**: [spec.md](./spec.md)
+
+**Input**: Feature specification from `specs/001-worldcup-manager/spec.md`
+
+## Summary
+
+A single-player, terminal-driven game that manages one national team through the 2026
+World Cup. The player picks a formation, XI, and bench from available squad players, then
+plays each of their team's matches as a sequence of discrete moments. Each moment's event
+is **proposed by the Claude API and validated by code before it becomes game state**
+(constitution: *code owns truth*). On invalid output or API failure the engine retries a
+bounded number of times, then falls back to a **deterministic resolver** so a match always
+reaches a valid result (*never stuck*). The deterministic core — calendar, standings,
+tiebreaks, best-8-third-place, bracket, knockout tie resolution, and injury/suspension
+carry-forward — is plain Python with no model calls and is fully unit-tested (*test the
+rules, not the outcomes*). Resolved matches are stored so a finished match reads back
+identically and a save reloads without re-calling the model (*replayable*).
+
+**Key scoping decision (not in spec, decided here):** only the **managed team's** matches
+run through the moment-by-moment LLM engine. All other (AI-vs-AI) fixtures in the same
+matchday are settled by the deterministic quick resolver. This keeps cost, latency, and
+API load bounded, and means group tables always fill even when the model is unavailable.
+
+## Technical Context
+
+**Language/Version**: Python 3.12
+
+**Primary Dependencies**: `anthropic` (Claude API SDK) for the match engine; `pytest` for
+tests. Everything else is standard library (`dataclasses`, `json`, `random`, `argparse`,
+`enum`, `pathlib`). No web framework, no ORM, no async runtime.
+
+**Storage**: Local JSON files. Bundled static data (teams, 26-man squads, 12 groups,
+fixtures) shipped read-only under `src/matchday/data/`; save games written to a
+user-writable save directory. No database.
+
+**Testing**: `pytest`. Unit tests cover deterministic logic and the event-validation
+contract (including known-bad engine output). Engine tests inject a fake event provider —
+**no network calls in the test suite**. Per constitution, tests never assert specific
+match scores.
+
+**Target Platform**: Local terminal (macOS / Linux), Python 3.12. Single-player, offline
+except for the Claude API call per moment (which is itself degradable to the fallback).
+
+**Project Type**: Single-project CLI application (thin presentation over a pure-logic core).
+
+**Performance Goals**: Interactive play. A moment resolves in roughly the time of one
+Haiku API round-trip (~1–2s typical); the fallback resolver is effectively instant. A full
+managed-team match resolves within a bounded, small number of discrete moments. No
+throughput/concurrency targets — one player, one match at a time.
+
+**Constraints**: Must always reach a valid result even with the model unavailable
+(bounded retries → deterministic fallback → surfaced degradation). Prompts are versioned
+and every engine input/output is logged. Match temperature is kept low for grounded
+commentary; cross-replay variety comes from fresh (unseeded) sampling per simulation, not
+from high temperature. No external services beyond the Claude API.
+
+**Scale/Scope**: 48 teams × 26 players; 12 groups of 4; 104 total tournament fixtures, of
+which the player plays at most 7 (3 group + up to 4 knockout, +1 for the final → 7). Save
+file holds full tournament state plus resolved event logs for played matches.
+
+## Constitution Check
+
+*GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
+
+Derived from `.specify/memory/constitution.md` v1.0.0. All five principles map to a gate:
+
+| # | Principle | Gate | Status |
+|---|-----------|------|--------|
+| 1 | **Minimal** | Plain functions + dataclasses; no framework/ORM/abstraction; no package or interface until a second caller exists. | ✅ PASS — stdlib-only core, single injectable seam (the event provider) justified by the test requirement (second caller = the fake). |
+| 2 | **Code owns truth** | Every model-proposed event passes an explicit validation contract before mutating match state; invalid output is rejected, never committed. | ✅ PASS — `match/validate.py` is the sole path from proposal to state. |
+| 3 | **Test the rules, not the outcomes** | Unit-test calendar, standings, brackets, suspensions, and validation against known-bad output; never assert specific scores. | ✅ PASS — see `research.md` test strategy; deterministic core is pure. |
+| 4 | **Never stuck** | Bounded retries → deterministic fallback resolver → surface degradation; game never blocks on the model. | ✅ PASS — `match/fallback.py` + degradation flag on every event source. |
+| 5 | **Replayable** | Low temperature, versioned prompts, log every engine I/O, store resolved events, saves reload without re-calling the model. | ✅ PASS — `PROMPT_VERSION` constant, engine I/O log, resolved events persisted. |
+
+**Governance check**: scope stays at one team / one tournament — no club play, seasons,
+transfers, or finances. When principles conflict, 2 and 4 beat 1: the validation layer and
+the fallback resolver are the two places where a little extra structure is explicitly
+allowed. No violations to justify; Complexity Tracking is empty.
+
+## Project Structure
+
+### Documentation (this feature)
+
+```text
+specs/001-worldcup-manager/
+├── plan.md              # This file
+├── research.md          # Phase 0 output — decisions & rationale
+├── data-model.md        # Phase 1 output — entities & state transitions
+├── quickstart.md        # Phase 1 output — run/validate guide
+├── contracts/           # Phase 1 output — internal contracts
+│   ├── event-schema.md          # model-proposed event shape + validation contract
+│   ├── engine-interface.md      # event-provider seam (real vs fake vs fallback)
+│   └── save-file-schema.md      # persisted tournament + match-log schema
+└── checklists/
+    └── requirements.md  # spec quality checklist (from /speckit-specify)
+```
+
+### Source Code (repository root)
+
+```text
+src/matchday/
+├── data/                # bundled static tournament data (read-only JSON)
+│   ├── teams.json
+│   ├── squads.json
+│   ├── groups.json
+│   └── fixtures.json
+├── models.py            # dataclasses: Player, Team, Squad, Lineup, Formation,
+│                        #   Match, MatchEvent, Substitution, AvailabilityStatus, ...
+├── formations.py        # the fixed formation menu + positional shape rules
+├── lineup.py            # lineup/bench validation against formation + availability
+├── availability.py      # injury/suspension carry-forward + yellow accumulation/reset
+├── tournament.py        # standings, tiebreaks, best-8-third, bracket, progression
+├── knockout.py          # extra-time + penalty-shootout tie resolution
+├── quick_resolver.py    # deterministic AI-vs-AI result (non-managed fixtures)
+├── match/
+│   ├── engine.py        # discrete-moment loop; orchestrates provider→validate→commit
+│   ├── prompt.py        # versioned prompt construction (PROMPT_VERSION)
+│   ├── provider.py      # EventProvider seam: ClaudeProvider (real) + FakeProvider (tests)
+│   ├── validate.py      # event-validation contract (code owns truth)
+│   └── fallback.py      # deterministic fallback event resolver
+├── persistence.py       # save/load full game state as JSON; engine I/O logging
+└── cli.py               # terminal play loop (thin presentation)
+
+tests/
+├── unit/                # deterministic logic + validation against known-bad output
+│   ├── test_tournament.py
+│   ├── test_knockout.py
+│   ├── test_availability.py
+│   ├── test_lineup.py
+│   └── test_validate.py
+└── integration/         # full loop with FakeProvider (no network)
+    └── test_play_loop.py
+```
+
+**Structure Decision**: Single-project CLI. The core (`models`, `tournament`, `knockout`,
+`availability`, `lineup`, `formations`, `quick_resolver`) is pure and model-free. The
+`match/` sub-package isolates the one risky, model-touching part behind a single seam
+(`EventProvider`), which is the only abstraction introduced up front — justified because it
+has a second caller by construction (the test fake) and is where principles 2 and 4 live.
+`cli.py` stays thin so a richer UI could replace it later without touching the engine.
+
+## Complexity Tracking
+
+> No constitution violations. Section intentionally empty.
+
+## Open Decisions (flagged for confirmation before implementation)
+
+These arise from spec **Assumptions** the plan cannot settle unilaterally. Defaults are
+proposed so implementation is not blocked, but each is worth a yes/no before building:
+
+1. **Fieldable-XI depletion recovery (spec Edge Cases / FR-005).** When a managed team has
+   fewer than 11 available players, what happens? *Proposed default:* guarantee it is
+   near-impossible via 26-man squad depth, but if it still occurs, allow starting **short**
+   (down to a floor of 7, mirroring the in-match abandonment threshold) and surface it
+   loudly. *Alternative:* allow risking a lightly-injured player. Needs a decision.
+
+2. **Injury-duration model (spec Assumptions / FR-017).** How many matches does an injury
+   cost? *Proposed default:* severity rolled at injury time via weighted RNG — e.g. ~60%
+   one match, ~30% two, ~10% tournament-ending — decided by code, not the model. Needs the
+   distribution confirmed.
+
+3. **AI-vs-AI resolution fidelity (new, introduced by this plan).** Confirm that non-managed
+   fixtures should be settled by the deterministic quick resolver (attribute-weighted),
+   **not** the LLM engine. *Proposed default:* yes — bounds cost/latency and keeps tables
+   filling under model outage. Flagged because it is a scope choice not stated in the spec.
+
+4. **FIFA-world-ranking tiebreak key (research R7).** The real 2026 tiebreak sequence uses
+   **FIFA world ranking** as its penultimate key (before drawing of lots), which requires
+   loading an external per-team ranking value into the squad data. *Proposed default:* carry
+   a static `fifa_ranking` field per team and use it as specified, for fidelity to the real
+   rules. *Alternative:* drop the ranking key and let the **drawing-of-lots** draw resolve the
+   (extremely rare) remaining ties, avoiding the external-data
+   dependency — simpler, but diverges from real 2026 rules. Needs a decision.
+
+Settled-by-real-rules (documented, not blocking): yellow accumulation = two yellows across
+separate matches → one-match ban, cleared after the quarter-finals; straight/second-yellow
+red → at least a one-match ban; knockout ties → extra time then penalties, with the sixth
+substitution unlocked at extra time.

@@ -71,7 +71,7 @@ Between matches, the player manages their squad for the next fixture, working ar
 - A player must always be able to field a legal XI: the game guarantees each managed team has enough available players (accounting for injuries and suspensions) to name 11 starters; if depletion would drop a team below a fieldable XI, the game surfaces this rather than silently producing an illegal lineup.
 - Every stoppage-driven substitution requirement (e.g. an injury with substitutions remaining) is resolvable — the game offers eligible bench players and does not deadlock.
 - A team reduced to a very low number of players through red cards and injuries mid-match continues to a result (the real-world abandonment threshold is out of scope; the match plays on short).
-- Ties in group ranking and in the "best third-placed teams" comparison are broken deterministically by the tournament's ordered tiebreak rules, never randomly.
+- Ties in group ranking and in the "best third-placed teams" comparison are broken by the tournament's ordered tiebreak rules. Every rule except the last is deterministic; if teams remain level after all of them, the final **drawing of lots** is a genuine random draw (mirroring FIFA). The resolved group order — including any drawing-of-lots outcome — is recorded once when the group completes and saved, then never recomputed, so a saved/reloaded tournament reads back identically.
 - If the underlying match simulation fails to produce a usable event, the game recovers and still advances the match to a valid result rather than stalling.
 - The player's own team can finish as a group's third-placed team and either advance (among the best eight) or be eliminated; both branches lead to a coherent next state.
 - Replays of the same fixture never produce identical event streams; conversely, a completed match, once resolved, reads back consistently (a saved/finished match does not re-randomise).
@@ -121,7 +121,7 @@ Between matches, the player manages their squad for the next fixture, working ar
 **Tournament structure & progression**
 
 - **FR-021**: The tournament MUST follow the real 2026 World Cup structure: 12 groups of 4 teams in a group stage, followed by a 32-team knockout bracket (Round of 32, Round of 16, Quarter-finals, Semi-finals, Final).
-- **FR-022**: The game MUST determine group standings and advancement so that the top two teams from each group plus the eight best third-placed teams advance, applying the tournament's ordered tiebreak rules deterministically.
+- **FR-022**: The game MUST determine group standings and advancement so that the top two teams from each group plus the eight best third-placed teams advance, applying the tournament's ordered tiebreak rules in order; all rules are deterministic except the final drawing of lots, which is a genuine random draw. The resolved group standings MUST be computed once when the group completes and saved, so that reload reads them back verbatim rather than recomputing them (and never re-draws).
 - **FR-023**: Knockout matches MUST resolve to a single winner (level scores at full time resolved by the tournament's extra-time and/or shootout rules) so that exactly one team advances.
 - **FR-024**: The game MUST advance the player's team through the bracket on a win and eliminate it on a loss, exactly as the real tournament rules dictate.
 - **FR-025**: The game MUST end the player's run when their team is eliminated or wins the final, and MUST present a tournament summary in either case.
@@ -129,7 +129,7 @@ Between matches, the player manages their squad for the next fixture, working ar
 **End-to-end loop & continuity**
 
 - **FR-026**: The full loop — select lineup → simulate match through discrete moments → manage substitutions/cards/injuries → see result → advance tournament state with updated availability — MUST work end-to-end without manual intervention.
-- **FR-027**: The game MUST preserve and reload game state so that a run can be continued, and a completed/resolved match reads back consistently rather than re-randomising.
+- **FR-027**: The game MUST preserve and reload game state so that a run can be continued, and any resolved outcome — a completed match or a resolved group standing — reads back consistently rather than re-randomising or being recomputed.
 
 ### Key Entities *(include if feature involves data)*
 
