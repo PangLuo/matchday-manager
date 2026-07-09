@@ -20,7 +20,8 @@ Represents one squad member.
 - `id`, `name`, `position: Position`
 - `rating` and a few attribute fields (e.g. `attack`, `defense`, `discipline`,
   `injury_proneness`) — **data only**: passed into the model prompt to inform its event
-  decision, and used to weight the fallback/shootout code RNG; never game logic.
+  decision (including penalty-kick moments), and used to weight the fallback resolver's
+  code RNG when a moment degrades; never game logic.
 - `availability: AvailabilityStatus`
 - **Relationships**: belongs to exactly one `Team`.
 

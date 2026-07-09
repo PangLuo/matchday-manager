@@ -190,15 +190,28 @@ fixed seed to exercise the draw (principle 3).
 ## R8. Knockout tie resolution
 
 **Decision**: Level knockout matches continue to **extra time** (two further periods of
-moments) and, if still level, a **penalty shootout** resolved by an attribute-weighted
-deterministic-with-RNG routine, yielding exactly one winner (FR-023). The **sixth
-substitution** unlocks when a match reaches extra time (FR-012).
+moments, resolved by the same per-moment engine as regular play) and, if still level, a
+**penalty shootout**. Each kick is itself an ordinary moment through the same
+provider-proposes/code-validates/fallback-on-failure loop (R5/R6) — with a kick-specific
+event outcome (e.g. goal, save, wide, high, post, rebound goal, own goal — final set is the
+model's/validator's call, not fixed here) rather than a flat score/miss coin-flip — so kicks carry the same narrative nuance as in-game chances. Code
+bounds the shootout by ordinary kick-count bookkeeping (best-of-5 per side, then sudden
+death, stopping as soon as the result is mathematically decided), which is what guarantees
+**exactly one winner** (FR-023), not a constraint on what each kick's outcome can be. The
+**sixth substitution** unlocks when a match reaches extra time (FR-012).
 
-**Rationale**: Mirrors real 2026 knockout rules and guarantees single-winner progression.
-The shootout reuses the code-side weighted-RNG approach so it works with or without the
-model.
+**Rationale**: Mirrors real 2026 knockout rules and guarantees single-winner progression by
+reusing the one per-moment engine implementation everywhere instead of introducing a second,
+narrower resolution path just for shootouts. It also means a shootout degrades the same way
+regular play does: bounded retries then the deterministic fallback (R5), whose outcome
+distribution is broadened beyond score/miss so a model-down shootout still feels plausible.
 
 **Alternatives considered**:
+- *Bespoke attribute-weighted deterministic-with-RNG shootout resolver, separate from the
+  moment engine* — rejected: duplicates the provider/validate/fallback/retry machinery R5
+  already provides, and collapses the kick outcome to a binary score/miss when the real
+  event space (e.g. wide, high, post, save, rebound goal, own goal) is exactly the kind of
+  judgment call ordinary moments already handle.
 - *Coin-flip resolution* — rejected: ignores squad quality and feels arbitrary.
 - *Replay matches* — rejected: not the tournament format.
 
