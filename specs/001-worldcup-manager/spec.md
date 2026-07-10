@@ -68,7 +68,7 @@ Between matches, the player manages their squad for the next fixture, working ar
 
 ### Edge Cases
 
-- A player must always be able to field a legal XI: the game guarantees each managed team has enough available players (accounting for injuries and suspensions) to name 11 starters; if depletion would drop a team below a fieldable XI, the game surfaces this rather than silently producing an illegal lineup.
+- A player must always be able to field a legal XI with a working bench: the game guarantees each managed team has enough available players (accounting for injuries and suspensions) to name 11 starters plus up to 5 bench (the maximum substitutions permitted); if depletion would still drop a team below that floor, the game grants a minimal emergency call-up (just enough replacement players to reach it) rather than forcing a short lineup or a subless bench, and surfaces the call-up to the player loudly.
 - Every stoppage-driven substitution requirement (e.g. an injury with substitutions remaining) is resolvable — the game offers eligible bench players and does not deadlock.
 - A team reduced to a very low number of players through red cards and injuries mid-match continues to a result (the real-world abandonment threshold is out of scope; the match plays on short).
 - Ties in group ranking and in the "best third-placed teams" comparison are broken by the tournament's ordered tiebreak rules. Every rule except the last is deterministic; if teams remain level after all of them, the final **drawing of lots** is a genuine random draw (mirroring FIFA). The resolved group order — including any drawing-of-lots outcome — is recorded once when the group completes and saved, then never recomputed, so a saved/reloaded tournament reads back identically.
@@ -130,6 +130,7 @@ Between matches, the player manages their squad for the next fixture, working ar
 
 - **FR-026**: The full loop — select lineup → simulate match through discrete moments → manage substitutions/cards/injuries → see result → advance tournament state with updated availability — MUST work end-to-end without manual intervention.
 - **FR-027**: The game MUST preserve and reload game state so that a run can be continued, and any resolved outcome — a completed match or a resolved group standing — reads back consistently rather than re-randomising or being recomputed.
+- **FR-028**: If a managed team's available players (accounting for injuries and suspensions) would drop below 11 starters plus a bench of up to 5 (the maximum substitutions permitted by FR-012) ahead of a fixture, the game MUST grant that team a minimal emergency call-up — adding only as many replacement players as needed to reach that floor — rather than permitting a short lineup, an illegal lineup, or a bench that leaves no substitution options, and MUST notify the player when a call-up occurs.
 
 ### Key Entities *(include if feature involves data)*
 
@@ -160,6 +161,7 @@ Between matches, the player manages their squad for the next fixture, working ar
 
 - **Team selection**: The player may choose any of the 48 qualified 2026 World Cup teams (a random/assigned option may also be offered); all teams are managed with the same rules and no artificial difficulty tiers beyond what the squad data implies.
 - **Squad data**: Squads use the tournament's 26-player squad size, and each squad contains enough players across positions to field a legal XI throughout a full run under normal injury/suspension attrition. Squad, group, and fixture data reflect the real 2026 World Cup as static data; exact player ratings/attributes are data-driven and not specified here.
+- **Emergency call-ups**: The 26-man squad is sized so depletion below a fieldable XI should be near-impossible; the emergency call-up in FR-028 is a last-resort safety valve, not a managed feature — it adds only generic replacement players (no scouting, valuation, or roster browsing), so it does not reopen the "no transfers" scope guardrail.
 - **Formations**: A small fixed menu of standard real-world formations is offered; custom/arbitrary formations and tactical instructions beyond formation/lineup/substitutions are out of scope.
 - **Substitution windows**: "At any stoppage in play" is modelled as substitutions being permitted at the discrete moment boundaries the simulation exposes, not in continuous real time.
 - **Disciplinary model**: Yellow-card accumulation follows the tournament convention (two yellow cards across separate matches trigger a one-match suspension, with accumulated yellows cleared after the quarter-finals); a red card triggers at least a one-match suspension. Injury duration is decided when the injury occurs and spans one or more subsequent matches.

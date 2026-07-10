@@ -57,7 +57,7 @@ commentary; cross-replay variety comes from fresh (unseeded) sampling per simula
 from high temperature. No external services beyond the Claude API.
 
 **Scale/Scope**: 48 teams × 26 players; 12 groups of 4; 104 total tournament fixtures, of
-which the player plays at most 7 (3 group + up to 4 knockout, +1 for the final → 7). Save
+which the player plays at most 8 (3 group + up to 5 knockout: R32, R16, QF, SF, Final). Save
 file holds full tournament state plus resolved event logs for played matches.
 
 ## Constitution Check
@@ -150,11 +150,17 @@ has a second caller by construction (the test fake) and is where principles 2 an
 These arise from spec **Assumptions** the plan cannot settle unilaterally. Defaults are
 proposed so implementation is not blocked, but each is worth a yes/no before building:
 
-1. **Fieldable-XI depletion recovery (spec Edge Cases / FR-005).** When a managed team has
-   fewer than 11 available players, what happens? *Proposed default:* guarantee it is
-   near-impossible via 26-man squad depth, but if it still occurs, allow starting **short**
-   (down to a floor of 7, mirroring the in-match abandonment threshold) and surface it
-   loudly. *Alternative:* allow risking a lightly-injured player. Needs a decision.
+1. **Fieldable-XI depletion recovery (spec Edge Cases / FR-005). RESOLVED.** When a managed
+   team has fewer than 11 available starters plus a 5-player bench (the max substitutions
+   FR-012 permits), the game performs a minimal **emergency call-up**: it adds just enough
+   replacement players (drawn from a generic reserve pool, not a transfer/market mechanic —
+   stays within the "no transfers" scope guardrail) to the squad to reach that floor, and
+   surfaces this to the player loudly as a rare event. The bench floor matters as much as the
+   starters: topping up to exactly 11 would leave a depleted team with zero substitutes,
+   meaning the next injury or red card strands them a player short for the rest of that
+   match and every match after. This replaces the earlier "start short down to a floor of 7"
+   and "risk a lightly-injured player" options — the between-match lineup screen never needs
+   to accept an illegal, short, or subless lineup. See spec FR-028 and Edge Cases.
 
 2. **Injury-duration model (spec Assumptions / FR-017).** How many matches does an injury
    cost? *Proposed default:* severity rolled at injury time via weighted RNG — e.g. ~60%
