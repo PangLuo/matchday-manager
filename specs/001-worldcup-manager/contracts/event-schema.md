@@ -35,13 +35,18 @@ then retries, then falls back — see `engine-interface.md`). Rejection reasons 
 for logging/tests.
 
 ### Actor legality (FR-010)
-- If `actor_id` is set: the player exists, belongs to `team_side`, and is **currently on the
-  pitch** (started or subbed on, and not subbed off / sent off / injured out).
+- If `actor_id` is set: the player exists, is **currently on the pitch** (started or subbed
+  on, and not subbed off / sent off / injured out), and belongs to `team_side` — **except
+  `OWN_GOAL`**, whose `actor_id` must belong to the side opposite `team_side` instead.
 - A player who has left the pitch by any means can never be `actor_id` or `secondary_id`
   again.
 
 ### Event-type legality (per current state)
 - `GOAL`: `actor_id` (scorer) required and on-pitch; increments that side's score by code.
+  `actor_id` MUST belong to `team_side`.
+- `OWN_GOAL`: mirrors `GOAL` — increments `team_side`'s score by code — but `actor_id`
+  (the defender) MUST belong to the side **opposite** `team_side`, and MUST be on-pitch.
+  `secondary_id` MUST be `null` (no assist on an own goal). (plan.md Open Decisions #5)
 - `YELLOW`: `actor_id` on-pitch and not already sent off. If the player **already has a
   yellow this match**, the event is upgraded by code to a `RED` (FR-015) — the validator
   emits the red effect, not the model.
@@ -77,7 +82,8 @@ for logging/tests.
 These become `test_validate.py` cases:
 1. `actor_id` names a player already **subbed off**.
 2. `actor_id` names a **sent-off** player.
-3. `actor_id` belongs to the **other** team than `team_side`.
+3. `actor_id` belongs to the **other** team than `team_side` (for any type except
+   `OWN_GOAL`, where the reverse is required — see case 11).
 4. `SUBSTITUTION` when `subs_used == limit`.
 5. `SUBSTITUTION` bringing on an **already-used** or **starting** player.
 6. `SUBSTITUTION` bringing on a player to **replace a sent-off** player (illegal restore).
@@ -86,3 +92,5 @@ These become `test_validate.py` cases:
    yellow.
 9. `type` outside the `EventType` enum (rejected at schema layer; validator also guards).
 10. Injury with no subs remaining → MUST yield short-handed, never a phantom substitution.
+11. `OWN_GOAL` with `actor_id` belonging to `team_side` itself (must be the opposite side),
+    or with a non-null `secondary_id` (no assist on an own goal).

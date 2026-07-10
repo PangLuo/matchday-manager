@@ -9,8 +9,10 @@ described conceptually; types shown are indicative. Persisted shapes live in
 - **Position**: `GK | DEF | MID | FWD` (fine-grained slots resolved by the formation).
 - **Phase**: `GROUP | R32 | R16 | QF | SF | FINAL | DONE`.
 - **AvailabilityState**: `AVAILABLE | INJURED | SUSPENDED`.
-- **EventType**: `KICKOFF | CHANCE | GOAL | FOUL | YELLOW | RED | INJURY | SUBSTITUTION |
-  HALF_TIME | FULL_TIME | EXTRA_TIME | PENALTY_SHOOTOUT | FINAL_WHISTLE | NOTHING`.
+- **EventType**: `KICKOFF | CHANCE | GOAL | OWN_GOAL | FOUL | YELLOW | RED | INJURY |
+  SUBSTITUTION | HALF_TIME | FULL_TIME | EXTRA_TIME | PENALTY_SHOOTOUT | FINAL_WHISTLE |
+  NOTHING`. `OWN_GOAL` mirrors `GOAL` (same score-increment-by-code effect for `team_side`)
+  but `actor_id` is the defender on the **opposite** side (plan.md Open Decisions #5).
 - **EventSource**: `MODEL | FALLBACK` (provenance; drives the degradation surface).
 
 ## Core entities
@@ -68,7 +70,8 @@ One discrete moment's outcome — the atomic unit of a match (FR-007/008).
 - `actor: Optional[PlayerRef]`, `secondary: Optional[PlayerRef]` (e.g. assist, fouled
   player, sub-in), `team_side`
 - `source: EventSource`
-- **Invariants** (enforced in `match/validate.py`): actor is on the pitch for `team_side`;
+- **Invariants** (enforced in `match/validate.py`): actor is on the pitch for `team_side`,
+  **except `OWN_GOAL`** where actor is on the pitch for the side *opposite* `team_side`;
   type is legal for current state; card/injury/sub effects are internally consistent.
 
 ### Substitution

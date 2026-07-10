@@ -147,7 +147,7 @@ has a second caller by construction (the test fake) and is where principles 2 an
 
 ## Open Decisions (flagged for confirmation before implementation)
 
-These arise from spec **Assumptions** the plan cannot settle unilaterally. All four below
+These arise from spec **Assumptions** the plan cannot settle unilaterally. All five below
 are now resolved (proposed defaults accepted); kept here as a record of the decision:
 
 1. **Fieldable-XI depletion recovery (spec Edge Cases / FR-005). RESOLVED.** When a managed
@@ -179,6 +179,15 @@ are now resolved (proposed defaults accepted); kept here as a record of the deci
    game carries a static `fifa_ranking` field per team and uses it as specified, for fidelity
    to the real rules (accepted over the simpler alternative of dropping the key and leaning
    on drawing-of-lots). See data-model.md (Team) and the save-file schema.
+
+5. **Own-goal representation (contracts/event-schema.md). RESOLVED.** `OWN_GOAL` is added
+   to `EventType` as a mirror of `GOAL`: same score-increment-by-code behavior for
+   `team_side`, but `actor_id` (the unlucky defender) must belong to the side **opposite**
+   `team_side`, and `secondary_id` is always `null` (no assist on an own goal). This replaces
+   the earlier gap where the actor-legality rule made own goals unrepresentable — one of the
+   known-bad test cases (#3, `actor_id` on the other team) previously rejected exactly this
+   shape. See data-model.md (`EventType`, `MatchEvent` invariants) and
+   `contracts/event-schema.md` (event-type legality, actor legality, known-bad case #11).
 
 Settled-by-real-rules (documented, not blocking): yellow accumulation = two yellows across
 separate matches → one-match ban, cleared after the quarter-finals; straight/second-yellow
