@@ -7,8 +7,9 @@ contracts and `data-model.md`; this file is the run/validate guide, not implemen
 
 - Python 3.12
 - `pip install anthropic pytest`
-- Claude API credentials for live play (`ant auth login`, or export `ANTHROPIC_API_KEY`).
-  **Not required for the test suite** — tests use `FakeProvider` and never hit the network.
+- Claude API credentials for live play: `export ANTHROPIC_API_KEY=sk-ant-...` (get a key from
+  console.anthropic.com). **Not required for the test suite** — tests use `FakeProvider` and
+  never hit the network.
 
 ## Run the test suite (no credentials needed)
 

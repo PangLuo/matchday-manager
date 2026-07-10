@@ -35,6 +35,8 @@ Per-player cross-match state (owned by `availability.py`).
 
 ### Team
 - `id`, `name`, `group_id`
+- `fifa_ranking: int` — static, real-world FIFA world ranking; used as the tiebreak's
+  penultimate key, before drawing of lots (research R7)
 - `players: list[Player]` (26)
 - **Relationships**: in one `Group`; one team is the player-managed team.
 

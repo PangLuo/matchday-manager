@@ -147,8 +147,8 @@ has a second caller by construction (the test fake) and is where principles 2 an
 
 ## Open Decisions (flagged for confirmation before implementation)
 
-These arise from spec **Assumptions** the plan cannot settle unilaterally. Defaults are
-proposed so implementation is not blocked, but each is worth a yes/no before building:
+These arise from spec **Assumptions** the plan cannot settle unilaterally. All four below
+are now resolved (proposed defaults accepted); kept here as a record of the decision:
 
 1. **Fieldable-XI depletion recovery (spec Edge Cases / FR-005). RESOLVED.** When a managed
    team has fewer than 11 available starters plus a 5-player bench (the max substitutions
@@ -162,23 +162,23 @@ proposed so implementation is not blocked, but each is worth a yes/no before bui
    and "risk a lightly-injured player" options — the between-match lineup screen never needs
    to accept an illegal, short, or subless lineup. See spec FR-028 and Edge Cases.
 
-2. **Injury-duration model (spec Assumptions / FR-017).** How many matches does an injury
-   cost? *Proposed default:* severity rolled at injury time via weighted RNG — e.g. ~60%
-   one match, ~30% two, ~10% tournament-ending — decided by code, not the model. Needs the
-   distribution confirmed.
+2. **Injury-duration model (spec Assumptions / FR-017). RESOLVED.** Severity is rolled at
+   injury time via weighted RNG — ~60% one match, ~30% two, ~10% tournament-ending — decided
+   by code, not the model. This is the `injury event, severity roll` step in the
+   `AvailabilityStatus` lifecycle (data-model.md); the exact weights live in code as a
+   constant, consistent with other data-driven values (e.g. player ratings) the spec leaves
+   unspecified.
 
-3. **AI-vs-AI resolution fidelity (new, introduced by this plan).** Confirm that non-managed
-   fixtures should be settled by the deterministic quick resolver (attribute-weighted),
-   **not** the LLM engine. *Proposed default:* yes — bounds cost/latency and keeps tables
-   filling under model outage. Flagged because it is a scope choice not stated in the spec.
+3. **AI-vs-AI resolution fidelity (new, introduced by this plan). RESOLVED.** Non-managed
+   fixtures are settled by the deterministic quick resolver (attribute-weighted), **not**
+   the LLM engine — bounds cost/latency and keeps tables filling under model outage. See
+   research R11 and spec Assumptions (Match simulation scope).
 
-4. **FIFA-world-ranking tiebreak key (research R7).** The real 2026 tiebreak sequence uses
-   **FIFA world ranking** as its penultimate key (before drawing of lots), which requires
-   loading an external per-team ranking value into the squad data. *Proposed default:* carry
-   a static `fifa_ranking` field per team and use it as specified, for fidelity to the real
-   rules. *Alternative:* drop the ranking key and let the **drawing-of-lots** draw resolve the
-   (extremely rare) remaining ties, avoiding the external-data
-   dependency — simpler, but diverges from real 2026 rules. Needs a decision.
+4. **FIFA-world-ranking tiebreak key (research R7). RESOLVED.** The real 2026 tiebreak
+   sequence uses **FIFA world ranking** as its penultimate key (before drawing of lots); the
+   game carries a static `fifa_ranking` field per team and uses it as specified, for fidelity
+   to the real rules (accepted over the simpler alternative of dropping the key and leaning
+   on drawing-of-lots). See data-model.md (Team) and the save-file schema.
 
 Settled-by-real-rules (documented, not blocking): yellow accumulation = two yellows across
 separate matches → one-match ban, cleared after the quarter-finals; straight/second-yellow
