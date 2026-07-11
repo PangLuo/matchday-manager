@@ -88,8 +88,7 @@ still reaches a final whistle, and the degradation is surfaced (events tagged
    ([contracts/save-file-schema.md](./contracts/save-file-schema.md)).
 **Pass**: fresh sims vary; finished matches are immutable on reload.
 
-## Before implementation — confirm the open decisions
+## Before implementation — decisions record
 
-Resolve the three flagged items in [plan.md](./plan.md) → *Open Decisions*
-(fieldable-XI depletion recovery, injury-duration distribution, AI-vs-AI resolution
-fidelity). Defaults are proposed; a quick yes/no unblocks `/speckit-tasks`.
+All five items in [plan.md](./plan.md) → *Open Decisions* are resolved (proposed
+defaults accepted); they are retained there only as a record of the decision.

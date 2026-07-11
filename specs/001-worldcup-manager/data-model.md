@@ -12,7 +12,7 @@ described conceptually; types shown are indicative. Persisted shapes live in
 - **EventType**: `KICKOFF | CHANCE | GOAL | OWN_GOAL | FOUL | YELLOW | RED | INJURY |
   SUBSTITUTION | HALF_TIME | FULL_TIME | EXTRA_TIME | PENALTY_SHOOTOUT | FINAL_WHISTLE |
   NOTHING`. `OWN_GOAL` mirrors `GOAL` (same score-increment-by-code effect for `team_side`)
-  but `actor_id` is the defender on the **opposite** side (plan.md Open Decisions #5).
+  but `actor_id` is the defender on the **opposite** side.
 - **EventSource**: `MODEL | FALLBACK` (provenance; drives the degradation surface).
 
 ## Core entities

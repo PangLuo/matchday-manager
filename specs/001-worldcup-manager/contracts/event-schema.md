@@ -46,7 +46,7 @@ for logging/tests.
   `actor_id` MUST belong to `team_side`.
 - `OWN_GOAL`: mirrors `GOAL` — increments `team_side`'s score by code — but `actor_id`
   (the defender) MUST belong to the side **opposite** `team_side`, and MUST be on-pitch.
-  `secondary_id` MUST be `null` (no assist on an own goal). (plan.md Open Decisions #5)
+  `secondary_id` MUST be `null` (no assist on an own goal).
 - `YELLOW`: `actor_id` on-pitch and not already sent off. If the player **already has a
   yellow this match**, the event is upgraded by code to a `RED` (FR-015) — the validator
   emits the red effect, not the model.
