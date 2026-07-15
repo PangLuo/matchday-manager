@@ -50,19 +50,31 @@ events (not RNG seeds) is what makes a finished match read back identically.
     "bench": ["p_1020","..."]
   },
   "events": [                              // ordered, frozen once status == FINAL
-    { "moment_index": 0, "minute": 0,  "type": "KICKOFF",      "team_side": null,   "actor_id": null,    "secondary_id": null, "commentary": "…", "source": "MODEL" },
-    { "moment_index": 7, "minute": 23, "type": "GOAL",         "team_side": "home", "actor_id": "p_1009","secondary_id": "p_1007", "commentary": "…", "source": "MODEL" },
-    { "moment_index": 9, "minute": 31, "type": "SUBSTITUTION", "team_side": "home", "actor_id": "p_1009","secondary_id": "p_1020", "commentary": "…", "source": "MODEL" }
+    { "moment_index": 0, "minute": 0,  "type": "KICKOFF",      "team_side": null,   "actor_id": null,    "secondary_id": null, "period": "REGULATION", "commentary": "…", "source": "MODEL" },
+    { "moment_index": 7, "minute": 23, "type": "GOAL",         "team_side": "home", "actor_id": "p_1009","secondary_id": "p_1007", "period": "REGULATION", "commentary": "…", "source": "MODEL" },
+    { "moment_index": 9, "minute": 31, "type": "SUBSTITUTION", "team_side": "home", "actor_id": "p_1009","secondary_id": "p_1020", "period": "REGULATION", "commentary": "…", "source": "MODEL" }
+    // knockout events may carry "period": "EXTRA_TIME" or "SHOOTOUT"; a SHOOTOUT GOAL feeds
+    // the (derived) penalty tally, never home/away below
   ]
 }
 ```
 
 Notes:
-- For `managed: false` matches, `events` MAY be empty; `result` is the quick-resolver output.
+- For `managed: false` matches, `events` MAY be empty; `result` is the **authoritative**
+  quick-resolver output (nothing to replay).
 - A `FINAL` match's `events`/`result` are **immutable** on reload — the engine reads them,
   never regenerates them.
-- Derived counters (score, cards, subs_used) are **not** stored per event; they are
+- No *per-event* running tallies (score-so-far, cards-so-far, subs-used) are stored; they are
   recomputed by replaying `events`, keeping code as the single source of truth on load too.
+- `result` fields that **are** stored, and how they relate to the event stream:
+  - `winner` / `decided_by` are stored authoritatively (a penalty/extra-time outcome, incl.
+    the shootout tally, is derived from `SHOOTOUT`/`EXTRA_TIME`-period events; `decided_by` is
+    `penalties` if any `SHOOTOUT` event exists, else `extra_time` if any `EXTRA_TIME` event
+    exists, else `normal`).
+  - For `managed: true`, `home`/`away` are the regulation-incl-extra-time scoreline and **MUST
+    equal** the replay of `REGULATION`/`EXTRA_TIME` goals (`SHOOTOUT` goals excluded). The
+    loader asserts this and **fails loud** on mismatch (principle 4) — the stored scoreline is
+    a validated cache, never a second source of truth.
 
 ## Engine I/O log entry (principle 5: log every engine input/output)
 

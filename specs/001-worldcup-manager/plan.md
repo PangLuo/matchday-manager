@@ -147,7 +147,7 @@ has a second caller by construction (the test fake) and is where principles 2 an
 
 ## Open Decisions (flagged for confirmation before implementation)
 
-These arise from spec **Assumptions** the plan cannot settle unilaterally. All five below
+These arise from spec **Assumptions** the plan cannot settle unilaterally. All six below
 are now resolved (proposed defaults accepted); kept here as a record of the decision:
 
 1. **Fieldable-XI depletion recovery (spec Edge Cases / FR-005). RESOLVED.** When a managed
@@ -188,6 +188,20 @@ are now resolved (proposed defaults accepted); kept here as a record of the deci
    known-bad test cases (#3, `actor_id` on the other team) previously rejected exactly this
    shape. See data-model.md (`EventType`, `MatchEvent` invariants) and
    `contracts/event-schema.md` (event-type legality, actor legality, known-bad case #11).
+
+6. **Penalty-shootout representation (contracts/event-schema.md, research R8). RESOLVED.**
+   Shootout kicks are ordinary replayable events (R8), so to keep replay from folding shootout
+   goals into the regulation scoreline, every committed event gains a code-set `period`
+   (`REGULATION | EXTRA_TIME | SHOOTOUT`) — **option A** (a phase tag on the event) over option
+   B (distinct `SHOOTOUT_*` event types). A tag reuses the existing `is_extra_time` phase state,
+   keeps the `EventType` enum and the model's output schema small, and leaves R8's kick-outcome
+   vocabulary in `commentary` rather than freezing it into types. The shootout tally and
+   `result.decided_by` are **derived** from `SHOOTOUT`/`EXTRA_TIME`-period events (not stored);
+   `result.home/away` is the regulation-incl-extra-time score and is asserted against replay on
+   load (fail loud). B was rejected for now as it expands the enum/validator/fallback surface and
+   is only worth it if per-kick outcomes need to be queryable (e.g. keeper save rates). See
+   data-model.md (`MatchPeriod`, `MatchEvent`), `contracts/event-schema.md` (Period & shootout,
+   known-bad case #12), and `contracts/save-file-schema.md` (`result` notes).
 
 Settled-by-real-rules (documented, not blocking): yellow accumulation = two yellows across
 separate matches → one-match ban, cleared after the quarter-finals; straight/second-yellow

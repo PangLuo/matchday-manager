@@ -14,6 +14,12 @@ described conceptually; types shown are indicative. Persisted shapes live in
   NOTHING`. `OWN_GOAL` mirrors `GOAL` (same score-increment-by-code effect for `team_side`)
   but `actor_id` is the defender on the **opposite** side.
 - **EventSource**: `MODEL | FALLBACK` (provenance; drives the degradation surface).
+- **MatchPeriod**: `REGULATION | EXTRA_TIME | SHOOTOUT`. The phase of play an event belongs
+  to, **set by code** from the match's current phase (never by the model). Replay uses it to
+  keep penalty-shootout kicks out of the regulation scoreline: a `GOAL` in `REGULATION`/
+  `EXTRA_TIME` increments the match score, whereas a `GOAL` in `SHOOTOUT` increments the
+  (derived) shootout tally instead. It is the persisted, per-event counterpart of the
+  `is_extra_time` live-state flag.
 
 ## Core entities
 
@@ -61,7 +67,8 @@ One fixture. Managed matches carry a live moment stream; AI-vs-AI matches are qu
 - **Live state** (managed matches): `minute`/`moment_index`, `score`, `on_pitch[side]`,
   `subs_used[side]`, `red_cards[side]`, per-player in-match yellows, `is_extra_time`
 - `events: list[MatchEvent]` (the resolved, ordered stream)
-- `result` (final score; winner for knockouts)
+- `result` (regulation-incl-extra-time score; `winner` and `decided_by` for knockouts; any
+  penalty-shootout tally is derived by replaying `SHOOTOUT`-period events, not stored)
 - **Relationships**: two `Team`s; produces many `MatchEvent`s and `Substitution`s.
 
 ### MatchEvent
@@ -69,6 +76,8 @@ One discrete moment's outcome — the atomic unit of a match (FR-007/008).
 - `moment_index`, `minute`, `type: EventType`, `commentary: str`
 - `actor: Optional[PlayerRef]`, `secondary: Optional[PlayerRef]` (e.g. assist, fouled
   player, sub-in), `team_side`
+- `period: MatchPeriod` — code-set phase tag (see enum); how replay separates a shootout
+  kick from a regulation goal
 - `source: EventSource`
 - **Invariants** (enforced in `match/validate.py`): actor is on the pitch for `team_side`,
   **except `OWN_GOAL`** where actor is on the pitch for the side *opposite* `team_side`;

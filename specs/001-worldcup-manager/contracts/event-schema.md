@@ -21,8 +21,11 @@ Requested via `client.messages.parse()` with `output_config.format`. The model p
 
 Constraints baked into the schema: `type` is an enum; ids are strings or null;
 `commentary` is a bounded-length string. The schema deliberately does **not** let the model
-set score, minute, cards-count, or subs-used — those are **derived by code** from the
-validated event, so the model can never directly write authoritative counters.
+set score, minute, cards-count, subs-used, or `period` — those are **derived by code** from
+the validated event and the current match phase, so the model can never directly write
+authoritative counters. In particular the model never marks a kick as a shootout kick; code
+stamps `period` from the phase the match is in, so a plain `GOAL` proposed during the
+shootout is simply tagged `SHOOTOUT` — there is no model-confusion path to guard against.
 
 ## 2. Validation contract (`match/validate.py`)
 
@@ -42,9 +45,12 @@ for logging/tests.
   again.
 
 ### Event-type legality (per current state)
-- `GOAL`: `actor_id` (scorer) required and on-pitch; increments that side's score by code.
-  `actor_id` MUST belong to `team_side`.
-- `OWN_GOAL`: mirrors `GOAL` — increments `team_side`'s score by code — but `actor_id`
+- `GOAL`: `actor_id` (scorer) required and on-pitch; increments a score by code — the
+  **regulation score** when `period` is `REGULATION`/`EXTRA_TIME`, or the **shootout tally**
+  when `period` is `SHOOTOUT` (see Period & shootout below). `actor_id` MUST belong to
+  `team_side`.
+- `OWN_GOAL`: mirrors `GOAL` — increments `team_side`'s score by code (regulation score or,
+  during `SHOOTOUT`, its shootout tally) — but `actor_id`
   (the defender) MUST belong to the side **opposite** `team_side`, and MUST be on-pitch.
   `secondary_id` MUST be `null` (no assist on an own goal).
 - `YELLOW`: `actor_id` on-pitch and not already sent off. If the player **already has a
@@ -56,7 +62,22 @@ for logging/tests.
   required to proceed; if none remain, the side continues a player short (FR-014).
 - `SUBSTITUTION`: see substitution rules below.
 - `NOTHING` / period markers (`KICKOFF`, `HALF_TIME`, `FULL_TIME`, `EXTRA_TIME`,
-  `FINAL_WHISTLE`): no actor required; always legal when the clock is in the right phase.
+  `PENALTY_SHOOTOUT`, `FINAL_WHISTLE`): no actor required; always legal when the clock is in
+  the right phase. A period marker also advances the code-owned `period` (`EXTRA_TIME` →
+  `EXTRA_TIME`, `PENALTY_SHOOTOUT` → `SHOOTOUT`).
+
+### Period & shootout (research R8)
+- Code stamps every committed event with `period` from the match's current phase; the model
+  never sets it.
+- Penalty-shootout kicks are ordinary moments resolved by the same engine, tagged
+  `period == SHOOTOUT`. A scored kick is a `GOAL` (or `OWN_GOAL` off the keeper); a miss/save
+  is a `NOTHING` whose nuance lives in `commentary` (R8 leaves the kick-outcome vocabulary
+  open). Their goals increment the **shootout tally**, never the regulation score.
+- The shootout tally is **derived** by replaying `SHOOTOUT`-period goals — it is not stored.
+  `result.decided_by` is likewise derived: `penalties` if any `SHOOTOUT` event exists, else
+  `extra_time` if any `EXTRA_TIME` event exists, else `normal`.
+- No substitutions occur during `SHOOTOUT`; the sixth substitution unlocks at `EXTRA_TIME`
+  (FR-012).
 
 ### Card accounting
 - A player's in-match yellow count is owned by code, incremented on a validated `YELLOW`.
@@ -69,13 +90,15 @@ for logging/tests.
 - `player_in` (=`secondary_id`) is on that team's bench and has not been used.
 - `subs_used[team_side] < limit`, where `limit = 5`, or `6` once the match has entered extra
   time.
+- No substitutions are legal once `period == SHOOTOUT`.
 - On commit (by code): move player_out off (permanently ineligible), player_in on,
   increment `subs_used`.
 - A sent-off player MUST NOT be replaced (the short-handed state persists).
 
 ### What code derives after a successful validate (never the model)
-`score`, `minute`/`moment_index`, per-player in-match yellows, `subs_used`, `red_cards`,
-`on_pitch` sets, and `source`. This is the concrete boundary of *code owns truth*.
+`score`, shootout tally, `period`, `minute`/`moment_index`, per-player in-match yellows,
+`subs_used`, `red_cards`, `on_pitch` sets, and `source`. This is the concrete boundary of
+*code owns truth*.
 
 ## 3. Known-bad inputs the validator MUST reject (test corpus, principle 3)
 
@@ -94,3 +117,5 @@ These become `test_validate.py` cases:
 10. Injury with no subs remaining → MUST yield short-handed, never a phantom substitution.
 11. `OWN_GOAL` with `actor_id` belonging to `team_side` itself (must be the opposite side),
     or with a non-null `secondary_id` (no assist on an own goal).
+12. `SUBSTITUTION` proposed while `period == SHOOTOUT` → MUST reject (subs are closed once the
+    shootout begins).
