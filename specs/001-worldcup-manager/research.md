@@ -153,7 +153,9 @@ justified because it has a real second caller (the fake) — consistent with pri
 standings with the **2026 FIFA-ordered tiebreaks** — overall **points**, then for teams
 level on points a head-to-head mini-table among only those teams (**h2h points → h2h goal
 difference → h2h goals scored**), then **overall goal difference → overall goals scored →
-fair-play (team-conduct) score → FIFA world ranking → drawing of lots** as the final key;
+fair-play (team-conduct) score → FIFA world ranking → drawing of lots** as the final key
+(the fair-play score is the per-team `conduct_points` tally accrued by code at match end —
+see data-model.md, Team);
 ranking the **best 8 third-placed** teams; seeding the 32-team bracket
 (R32 → R16 → QF → SF → third-place play-off → Final); and knockout progression. No model calls anywhere in this
 layer.

@@ -14,14 +14,14 @@ events (not RNG seeds) is what makes a finished match read back identically.
   "phase": "GROUP",                       // Phase enum
   "rng_note": "live sim is unseeded; seeds appear only in tests",
 
-  "teams": { "ENG": { "id": "ENG", "name": "England", "group_id": "B", "fifa_ranking": 4, "players": [ /* Player */ ] }, /* ... */ },
+  "teams": { "ENG": { "id": "ENG", "name": "England", "group_id": "B", "fifa_ranking": 4, "conduct_points": -3, "players": [ /* Player */ ] }, /* ... */ },
 
   "availability": {                        // carry-forward table, id -> AvailabilityStatus
     "p_1023": { "state": "SUSPENDED", "matches_remaining": 1, "accumulated_yellows": 0 },
     "p_1044": { "state": "INJURED",   "matches_remaining": 2, "accumulated_yellows": 1 }
   },
 
-  "groups": [ { "id": "B", "team_ids": ["ENG","..."], "standings": [ /* resolved once when the group completes: ordered team_ids + P/W/D/L/GF/GA/Pts, incl. any drawing-of-lots outcome; read back verbatim on reload, never recomputed (research R7) */ ] } ],
+  "groups": [ { "id": "B", "team_ids": ["ENG","..."], "standings": [ /* resolved once when the group completes: ordered team_ids + P/W/D/L/GF/GA/Pts/FP (conduct), incl. any drawing-of-lots outcome; read back verbatim on reload, never recomputed (research R7) */ ] } ],
 
   "bracket": { "R32": [ { "match_id": "K01", "home": "ENG", "away": "..." } ], "R16": [], "QF": [], "SF": [], "THIRD_PLACE": [], "FINAL": [] },
 

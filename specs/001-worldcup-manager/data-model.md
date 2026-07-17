@@ -45,6 +45,12 @@ Per-player cross-match state (owned by `availability.py`).
 - `id`, `name`, `group_id`
 - `fifa_ranking: int` — static, real-world FIFA world ranking; used as the tiebreak's
   penultimate key, before drawing of lots (research R7)
+- `conduct_points: int` — running FIFA fair-play tally (0 or negative): −1 per yellow, −3
+  per second-yellow red, −4 per direct red, −5 for a yellow followed by a direct red,
+  summed over the team's group-stage matches. Updated by code at match end from the same
+  card outcomes `availability.py` consumes (managed matches: the validated event stream;
+  quick-resolved matches: the quick resolver's disciplinary output). Feeds the fair-play
+  tiebreak key (research R7).
 - `players: list[Player]` (26)
 - **Relationships**: in one `Group`; one team is the player-managed team.
 
