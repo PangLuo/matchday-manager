@@ -31,6 +31,9 @@ Represents one squad member.
   decision (including penalty-kick moments), and used to weight the fallback resolver's
   code RNG when a moment degrades; never game logic.
 - `availability: AvailabilityStatus`
+- `emergency_callup: bool` — `true` for an FR-028 replacement generated on the fly
+  (research R12); drives the loud call-up surface. Call-ups are appended to the squad,
+  persisted, and never regenerated on reload.
 - **Relationships**: belongs to exactly one `Team`.
 
 ### AvailabilityStatus
@@ -51,7 +54,7 @@ Per-player cross-match state (owned by `availability.py`).
   card outcomes `availability.py` consumes (managed matches: the validated event stream;
   quick-resolved matches: the quick resolver's disciplinary output). Feeds the fair-play
   tiebreak key (research R7).
-- `players: list[Player]` (26)
+- `players: list[Player]` (26; may grow past 26 through emergency call-ups, research R12)
 - **Relationships**: in one `Group`; one team is the player-managed team.
 
 ### Formation

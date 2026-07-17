@@ -64,6 +64,24 @@ def resolve(state: MatchState) -> CommittedEvent   # never raises, never rejects
   sent-off player (it is bound by the same rules the validator enforces).
 - Reused as the per-moment core of the AI-vs-AI **quick resolver** (research R11).
 
+## Call-up generation (FR-028, research R12)
+
+```python
+def propose_callups(team: TeamState, needs: list[Position], prompt_version: str) \
+        -> list[ProposedPlayer] | ProviderError
+```
+
+- **Code computes `needs`** (how many players, which positions) from the availability floor
+  check (11 starters + a 5-player bench); the model proposes only each replacement's name
+  and attribute values.
+- Validation (code): position as requested; attributes within a code-defined modest band
+  (below the squad's average rating); name non-empty and unique in the squad. `id` is
+  code-assigned, never the model's.
+- Same retry policy as moments (`MAX_RETRIES`, then fallback): the fallback mints generic
+  reserves ("Reserve DEF" style, baseline attributes), so a model-down call-up still
+  succeeds and the lineup screen never accepts a short or subless lineup.
+- Committed call-ups are persisted (`emergency_callup: true`) and never regenerated on load.
+
 ## Prompt versioning (`match/prompt.py`)
 
 - A module-level `PROMPT_VERSION` constant (e.g. `"v1"`); every engine I/O log entry records

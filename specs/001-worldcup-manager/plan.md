@@ -161,7 +161,9 @@ are now resolved (proposed defaults accepted); kept here as a record of the deci
    meaning the next injury or red card strands them a player short for the rest of that
    match and every match after. This replaces the earlier "start short down to a floor of 7"
    and "risk a lightly-injured player" options — the between-match lineup screen never needs
-   to accept an illegal, short, or subless lineup. See spec FR-028 and Edge Cases.
+   to accept an illegal, short, or subless lineup. Replacement-player data (name, attributes)
+   is **generated on the fly by the model** and validated/bounded by code, with a
+   deterministic generic-reserve fallback — see research R12. See spec FR-028 and Edge Cases.
 
 2. **Injury-duration model (spec Assumptions / FR-017). RESOLVED.** Severity is rolled at
    injury time via weighted RNG — ~60% one match, ~30% two, ~10% tournament-ending — decided

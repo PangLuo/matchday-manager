@@ -88,6 +88,16 @@ still reaches a final whistle, and the degradation is surfaced (events tagged
    ([contracts/save-file-schema.md](./contracts/save-file-schema.md)).
 **Pass**: fresh sims vary; finished matches are immutable on reload.
 
+### V8 — Emergency call-up floor (FR-028, SC-007)
+1. Via a test (or an edited save), deplete a squad below 11 available starters plus a
+   5-player bench ahead of a fixture.
+2. Open the next lineup screen.
+**Pass**: the game announces the call-up loudly; just enough generated players (flagged
+`emergency_callup`) are added to reach the floor; they are selectable, survive save/reload
+unchanged, and are never regenerated (research R12). With the model unavailable, generic
+fallback reserves appear instead — the lineup screen never accepts a short or subless
+lineup.
+
 ## Before implementation — decisions record
 
 All six items in [plan.md](./plan.md) → *Open Decisions* are resolved (proposed

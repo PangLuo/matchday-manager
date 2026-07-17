@@ -14,7 +14,7 @@ events (not RNG seeds) is what makes a finished match read back identically.
   "phase": "GROUP",                       // Phase enum
   "rng_note": "live sim is unseeded; seeds appear only in tests",
 
-  "teams": { "ENG": { "id": "ENG", "name": "England", "group_id": "B", "fifa_ranking": 4, "conduct_points": -3, "players": [ /* Player */ ] }, /* ... */ },
+  "teams": { "ENG": { "id": "ENG", "name": "England", "group_id": "B", "fifa_ranking": 4, "conduct_points": -3, "players": [ /* Player; may exceed 26 — FR-028 call-ups carry "emergency_callup": true (research R12) */ ] }, /* ... */ },
 
   "availability": {                        // carry-forward table, id -> AvailabilityStatus
     "p_1023": { "state": "SUSPENDED", "matches_remaining": 1, "accumulated_yellows": 0 },

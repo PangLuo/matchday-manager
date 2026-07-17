@@ -272,3 +272,32 @@ keeps tables filling even during a model outage (principle 4). Flagged as plan o
   visible benefit.
 - *Fully random other results* — rejected: ignores squad quality, making the bracket feel
   arbitrary; attribute-weighting is barely more code and much more plausible.
+
+## R12. Emergency call-up player generation (FR-028)
+
+**Decision**: When the between-match floor check (11 available starters + a 5-player bench,
+FR-028) fails, **code decides** how many replacement players are needed and at which
+positions; the **model generates** each replacement's flavor — name and attribute values —
+through the same propose→validate→commit pattern as match events (structured output via
+`messages.parse()`). Code validates every proposal: the requested position is honored,
+attributes fall within a code-defined modest band (below the squad's average rating), the
+name is non-empty and unique within the squad; ids are **code-assigned**, never the
+model's. On rejection or API failure: the same bounded-retry policy as moments, then a
+deterministic fallback that mints a generic reserve ("Reserve DEF" style, baseline
+attributes) so a model-down call-up still succeeds (principle 4). Committed call-ups are
+appended to the team's squad flagged `emergency_callup: true`, persisted in the save, and
+never regenerated on reload (principle 5). The call-up is surfaced loudly (spec Edge Cases).
+
+**Rationale**: Reuses the established provider→validate→fallback machinery instead of
+introducing new data assets: no static reserve-pool file to author and maintain for 48
+teams for a near-impossible event (principle 1), while code still owns the trigger, count,
+positions, ids, and attribute bounds (principle 2). Generated names/attributes keep the
+loud call-up moment immersive. Stays within the "no transfers" guardrail — no scouting,
+valuation, or roster browsing (spec Assumptions).
+
+**Alternatives considered**:
+- *Static bundled reserve-pool data per team* — rejected: authoring 48 teams of reserve
+  data for a last-resort path is wasted effort and dead weight in `src/matchday/data/`.
+- *Pure code-generated generic reserves as the primary path* — rejected as primary: bland
+  placeholder names in a deliberately loud, player-facing moment; retained verbatim as the
+  deterministic fallback.
