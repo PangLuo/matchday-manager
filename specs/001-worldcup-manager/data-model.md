@@ -7,7 +7,7 @@ described conceptually; types shown are indicative. Persisted shapes live in
 ## Enumerations
 
 - **Position**: `GK | DEF | MID | FWD` (fine-grained slots resolved by the formation).
-- **Phase**: `GROUP | R32 | R16 | QF | SF | FINAL | DONE`.
+- **Phase**: `GROUP | R32 | R16 | QF | SF | THIRD_PLACE | FINAL | DONE`.
 - **AvailabilityState**: `AVAILABLE | INJURED | SUSPENDED`.
 - **EventType**: `KICKOFF | CHANCE | GOAL | OWN_GOAL | FOUL | YELLOW | RED | INJURY |
   SUBSTITUTION | HALF_TIME | FULL_TIME | EXTRA_TIME | PENALTY_SHOOTOUT | FINAL_WHISTLE |
@@ -131,8 +131,9 @@ on-pitch --(straight red)--> off (a player short; no replacement)
 ### Tournament phase (`tournament.py`)
 ```
 GROUP --(all group matches resolved; standings + best-8-third computed)--> R32
-R32 --> R16 --> QF --> SF --> FINAL --(final resolved)--> DONE
-# managed team eliminated at any knockout loss --> DONE (tournament summary)
+R32 --> R16 --> QF --> SF --> THIRD_PLACE --> FINAL --(final resolved)--> DONE
+# managed team eliminated at a knockout loss before the SF --> DONE (tournament summary)
+# managed team loses the SF --> plays THIRD_PLACE as a managed match --> DONE
 ```
 
 ### Match lifecycle (managed match — `match/engine.py`)

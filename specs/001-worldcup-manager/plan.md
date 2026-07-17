@@ -56,9 +56,10 @@ and every engine input/output is logged. Match temperature is kept low for groun
 commentary; cross-replay variety comes from fresh (unseeded) sampling per simulation, not
 from high temperature. No external services beyond the Claude API.
 
-**Scale/Scope**: 48 teams × 26 players; 12 groups of 4; 104 total tournament fixtures, of
-which the player plays at most 8 (3 group + up to 5 knockout: R32, R16, QF, SF, Final). Save
-file holds full tournament state plus resolved event logs for played matches.
+**Scale/Scope**: 48 teams × 26 players; 12 groups of 4; 104 total tournament fixtures
+(including the third-place play-off), of which the player plays at most 8 (3 group + up to 5
+knockout: R32, R16, QF, SF, then the Final or — after a semi-final loss — the third-place
+play-off). Save file holds full tournament state plus resolved event logs for played matches.
 
 ## Constitution Check
 

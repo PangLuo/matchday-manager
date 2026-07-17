@@ -71,8 +71,8 @@ after the suspension/injury duration is served, they become selectable again
 **Pass**: exactly the top two of each group plus the eight best third-placed teams advance,
 by the ordered tiebreak keys (deterministic except a final random drawing of lots, recorded
 once); every knockout tie yields exactly one winner (extra time
-→ penalties); a knockout loss ends the run with a summary, a final win is recognised as the
-World Cup won (FR-021–025).
+→ penalties); a knockout loss ends the run with a summary (a semi-final loss routes through
+the third-place play-off first), a final win is recognised as the World Cup won (FR-021–025).
 
 ### V6 — Never stuck (SC-007, principle 4)
 1. Run the integration test that injects a burst of `ProviderError`s (or play with

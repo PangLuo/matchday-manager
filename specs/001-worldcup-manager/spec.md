@@ -60,7 +60,7 @@ Between matches, the player manages their squad for the next fixture, working ar
 1. **Given** a player was injured or suspended in a match, **When** the next match's lineup is selected, **Then** that player is shown as unavailable and cannot be placed in the XI or on the bench.
 2. **Given** a completed set of group matches, **When** the group stage concludes, **Then** the top two of each group plus the eight best third-placed teams advance to the Round of 32, ranked per tournament rules.
 3. **Given** a knockout match that is level at full time, **When** the match must produce a winner, **Then** the tie is resolved so exactly one team advances and the other is eliminated.
-4. **Given** the player's team loses a knockout match, **When** the result is confirmed, **Then** the player is eliminated and the game presents a tournament summary.
+4. **Given** the player's team loses a knockout match, **When** the result is confirmed, **Then** the player is eliminated and the game presents a tournament summary; a semi-final loss first routes to the third-place play-off, with the summary following that match.
 5. **Given** the player's team wins the final, **When** the result is confirmed, **Then** the game recognises the World Cup as won and presents a tournament summary.
 6. **Given** a suspension that spans a defined number of matches, **When** those matches have been served, **Then** the affected player becomes available again for selection.
 
@@ -120,11 +120,11 @@ Between matches, the player manages their squad for the next fixture, working ar
 
 **Tournament structure & progression**
 
-- **FR-021**: The tournament MUST follow the real 2026 World Cup structure: 12 groups of 4 teams in a group stage, followed by a 32-team knockout bracket (Round of 32, Round of 16, Quarter-finals, Semi-finals, Final).
+- **FR-021**: The tournament MUST follow the real 2026 World Cup structure: 12 groups of 4 teams in a group stage, followed by a 32-team knockout bracket (Round of 32, Round of 16, Quarter-finals, Semi-finals, the third-place play-off between the semi-final losers, and the Final) — 104 matches in total.
 - **FR-022**: The game MUST determine group standings and advancement so that the top two teams from each group plus the eight best third-placed teams advance, applying the tournament's ordered tiebreak rules in order; all rules are deterministic except the final drawing of lots, which is a genuine random draw. The resolved group standings MUST be computed once when the group completes and saved, so that reload reads them back verbatim rather than recomputing them (and never re-draws).
 - **FR-023**: Knockout matches MUST resolve to a single winner (level scores at full time resolved by the tournament's extra-time and/or shootout rules) so that exactly one team advances.
-- **FR-024**: The game MUST advance the player's team through the bracket on a win and eliminate it on a loss, exactly as the real tournament rules dictate.
-- **FR-025**: The game MUST end the player's run when their team is eliminated or wins the final, and MUST present a tournament summary in either case.
+- **FR-024**: The game MUST advance the player's team through the bracket on a win and eliminate it on a loss, exactly as the real tournament rules dictate; a semi-final loss sends the team to the third-place play-off (played as a normal managed match) before its run ends.
+- **FR-025**: The game MUST end the player's run when their team is eliminated (for a semi-final loss, after the third-place play-off has been played) or wins the final, and MUST present a tournament summary in either case.
 
 **End-to-end loop & continuity**
 

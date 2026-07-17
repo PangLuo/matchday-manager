@@ -23,7 +23,7 @@ events (not RNG seeds) is what makes a finished match read back identically.
 
   "groups": [ { "id": "B", "team_ids": ["ENG","..."], "standings": [ /* resolved once when the group completes: ordered team_ids + P/W/D/L/GF/GA/Pts, incl. any drawing-of-lots outcome; read back verbatim on reload, never recomputed (research R7) */ ] } ],
 
-  "bracket": { "R32": [ { "match_id": "K01", "home": "ENG", "away": "..." } ], "R16": [], "QF": [], "SF": [], "FINAL": [] },
+  "bracket": { "R32": [ { "match_id": "K01", "home": "ENG", "away": "..." } ], "R16": [], "QF": [], "SF": [], "THIRD_PLACE": [], "FINAL": [] },
 
   "fixtures": [ /* Match records, see below */ ],
 

@@ -155,7 +155,7 @@ level on points a head-to-head mini-table among only those teams (**h2h points �
 difference → h2h goals scored**), then **overall goal difference → overall goals scored →
 fair-play (team-conduct) score → FIFA world ranking → drawing of lots** as the final key;
 ranking the **best 8 third-placed** teams; seeding the 32-team bracket
-(R32 → R16 → QF → SF → Final); and knockout progression. No model calls anywhere in this
+(R32 → R16 → QF → SF → third-place play-off → Final); and knockout progression. No model calls anywhere in this
 layer.
 
 **Rationale**: These are exactly the deterministic rules principle 3 says to unit-test.
