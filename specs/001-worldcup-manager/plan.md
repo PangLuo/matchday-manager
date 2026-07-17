@@ -195,10 +195,13 @@ are now resolved (proposed defaults accepted); kept here as a record of the deci
    (`REGULATION | EXTRA_TIME | SHOOTOUT`) — **option A** (a phase tag on the event) over option
    B (distinct `SHOOTOUT_*` event types). A tag reuses the existing `is_extra_time` phase state,
    keeps the `EventType` enum and the model's output schema small, and leaves R8's kick-outcome
-   vocabulary in `commentary` rather than freezing it into types. The shootout tally and
-   `result.decided_by` are **derived** from `SHOOTOUT`/`EXTRA_TIME`-period events (not stored);
-   `result.home/away` is the regulation-incl-extra-time score and is asserted against replay on
-   load (fail loud). B was rejected for now as it expands the enum/validator/fallback surface and
+   vocabulary in `commentary` rather than freezing it into types. The shootout tally is
+   **derived** from `SHOOTOUT`-period events (never stored). `result.decided_by` is stored for
+   every match: for managed matches it is a validated cache the loader asserts against the
+   value derived from the period-tagged events (fail loud) — the same rule as
+   `result.home/away`, the stored regulation-incl-extra-time score asserted against replay on
+   load — while for quick-resolved matches (which may carry no events) the stored value is
+   authoritative. B was rejected for now as it expands the enum/validator/fallback surface and
    is only worth it if per-kick outcomes need to be queryable (e.g. keeper save rates). See
    data-model.md (`MatchPeriod`, `MatchEvent`), `contracts/event-schema.md` (Period & shootout,
    known-bad case #12), and `contracts/save-file-schema.md` (`result` notes).

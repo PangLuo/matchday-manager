@@ -67,10 +67,13 @@ Notes:
 - No *per-event* running tallies (score-so-far, cards-so-far, subs-used) are stored; they are
   recomputed by replaying `events`, keeping code as the single source of truth on load too.
 - `result` fields that **are** stored, and how they relate to the event stream:
-  - `winner` / `decided_by` are stored authoritatively (a penalty/extra-time outcome, incl.
-    the shootout tally, is derived from `SHOOTOUT`/`EXTRA_TIME`-period events; `decided_by` is
-    `penalties` if any `SHOOTOUT` event exists, else `extra_time` if any `EXTRA_TIME` event
-    exists, else `normal`).
+  - `decided_by` is stored for every match. For `managed: true` it is a **validated cache**:
+    the loader re-derives it from the period-tagged events (`penalties` if any `SHOOTOUT`
+    event exists, else `extra_time` if any `EXTRA_TIME` event exists, else `normal`) and
+    **fails loud** on mismatch. For `managed: false` (events may be empty) the stored value
+    is authoritative. The shootout tally itself is never stored — it is derived by replaying
+    `SHOOTOUT`-period goals.
+  - `winner` is stored authoritatively.
   - For `managed: true`, `home`/`away` are the regulation-incl-extra-time scoreline and **MUST
     equal** the replay of `REGULATION`/`EXTRA_TIME` goals (`SHOOTOUT` goals excluded). The
     loader asserts this and **fails loud** on mismatch (principle 4) — the stored scoreline is

@@ -74,8 +74,11 @@ for logging/tests.
   is a `NOTHING` whose nuance lives in `commentary` (R8 leaves the kick-outcome vocabulary
   open). Their goals increment the **shootout tally**, never the regulation score.
 - The shootout tally is **derived** by replaying `SHOOTOUT`-period goals — it is not stored.
-  `result.decided_by` is likewise derived: `penalties` if any `SHOOTOUT` event exists, else
-  `extra_time` if any `EXTRA_TIME` event exists, else `normal`.
+- `result.decided_by` is stored, but for managed matches it is a validated cache: the loader
+  re-derives it — `penalties` if any `SHOOTOUT` event exists, else `extra_time` if any
+  `EXTRA_TIME` event exists, else `normal` — and asserts it equals the stored value (fail
+  loud), the same rule `save-file-schema.md` applies to `result.home/away`. For quick-resolved
+  matches (no events to derive from) the stored value is authoritative.
 - No substitutions occur during `SHOOTOUT`; the sixth substitution unlocks at `EXTRA_TIME`
   (FR-012).
 
