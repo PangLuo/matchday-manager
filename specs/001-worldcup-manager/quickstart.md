@@ -90,5 +90,5 @@ still reaches a final whistle, and the degradation is surfaced (events tagged
 
 ## Before implementation — decisions record
 
-All five items in [plan.md](./plan.md) → *Open Decisions* are resolved (proposed
+All six items in [plan.md](./plan.md) → *Open Decisions* are resolved (proposed
 defaults accepted); they are retained there only as a record of the decision.
