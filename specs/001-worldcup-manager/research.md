@@ -32,8 +32,9 @@ validates** the proposed event for legality (R4) and commits it. Keep temperatur
 unseeded stochastic sampling on each fresh simulation, and (b) an optional per-moment
 code-supplied "luck" value passed into the prompt as a variance nudge — randomness stays
 code-owned, but the *decision* is the model's. The attribute-weighted code RNG survives
-only as the deterministic **fallback** resolver (R5) and the penalty-shootout routine (R8),
-never the primary path. A **resolved** match stores its events and is never re-simulated on
+only as the deterministic **fallback** resolver (R5) — which also covers shootout kicks when
+a moment degrades, since kicks run through the same per-moment loop (R8) — never the primary
+path. A **resolved** match stores its events and is never re-simulated on
 reload (FR-027).
 
 **Rationale**: This is principle 2 read literally — "the LLM *proposes* match events; code
