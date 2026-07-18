@@ -151,7 +151,7 @@ has a second caller by construction (the test fake) and is where principles 2 an
 These arise from spec **Assumptions** the plan cannot settle unilaterally. All six below
 are now resolved (proposed defaults accepted); kept here as a record of the decision:
 
-1. **Fieldable-XI depletion recovery (spec Edge Cases / FR-005). RESOLVED.** When a managed
+1. **Fieldable-XI depletion recovery (spec Edge Cases / FR-028). RESOLVED.** When a managed
    team has fewer than 11 available starters plus a 5-player bench (the max substitutions
    FR-012 permits), the game performs a minimal **emergency call-up**: it adds just enough
    replacement players (drawn from a generic reserve pool, not a transfer/market mechanic —
@@ -196,7 +196,8 @@ are now resolved (proposed defaults accepted); kept here as a record of the deci
    Shootout kicks are ordinary replayable events (R8), so to keep replay from folding shootout
    goals into the regulation scoreline, every committed event gains a code-set `period`
    (`REGULATION | EXTRA_TIME | SHOOTOUT`) — **option A** (a phase tag on the event) over option
-   B (distinct `SHOOTOUT_*` event types). A tag reuses the existing `is_extra_time` phase state,
+   B (distinct `SHOOTOUT_*` event types). A tag is stamped from the match's live
+   `current_period` phase state (`REGULATION → EXTRA_TIME → SHOOTOUT`),
    keeps the `EventType` enum and the model's output schema small, and leaves R8's kick-outcome
    vocabulary in `commentary` rather than freezing it into types. The shootout tally is
    **derived** from `SHOOTOUT`-period events (never stored). `result.decided_by` is stored for

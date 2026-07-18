@@ -49,10 +49,14 @@ for logging/tests.
   **regulation score** when `period` is `REGULATION`/`EXTRA_TIME`, or the **shootout tally**
   when `period` is `SHOOTOUT` (see Period & shootout below). `actor_id` MUST belong to
   `team_side`.
-- `OWN_GOAL`: mirrors `GOAL` — increments `team_side`'s score by code (regulation score or,
-  during `SHOOTOUT`, its shootout tally) — but `actor_id`
+- `OWN_GOAL`: mirrors `GOAL` — increments `team_side`'s score by code — but `actor_id`
   (the defender) MUST belong to the side **opposite** `team_side`, and MUST be on-pitch.
-  `secondary_id` MUST be `null` (no assist on an own goal).
+  `secondary_id` MUST be `null` (no assist on an own goal). Illegal during `SHOOTOUT`
+  (no own goals in a real shootout — see Period & shootout).
+- `CHANCE` / `FOUL`: narrative moments with no counter effects — `actor_id` required and
+  on-pitch for `team_side` (generic actor legality); for `FOUL`, an optional `secondary_id`
+  (the fouled player) MUST be on-pitch for the **opposite** side. No score/card/sub state
+  changes; discipline arrives only via a separate `YELLOW`/`RED` event.
 - `YELLOW`: `actor_id` on-pitch and not already sent off. If the player **already has a
   yellow this match**, the event is upgraded by code to a `RED` (FR-015) — the validator
   emits the red effect, not the model.
@@ -71,15 +75,16 @@ for logging/tests.
 - Code stamps every committed event with `period` from the match's current phase; the model
   never sets it.
 - Penalty-shootout kicks are ordinary moments resolved by the same engine, tagged
-  `period == SHOOTOUT`. A scored kick is a `GOAL` (or `OWN_GOAL` off the keeper); a miss/save
-  is a `NOTHING` whose nuance lives in `commentary` (R8 leaves the kick-outcome vocabulary
-  open). Their goals increment the **shootout tally**, never the regulation score.
+  `period == SHOOTOUT`. A scored kick is a `GOAL`; a missed/saved kick is a `NOTHING` whose
+  manner (saved, wide, high, off the post) lives in `commentary`. As in the real shootout
+  there are no rebounds and no own goals — `OWN_GOAL` is illegal during `SHOOTOUT`
+  (known-bad case #14). Shootout goals increment the **shootout tally**, never the
+  regulation score.
 - **Kick attribution (required during `SHOOTOUT`)**: every committed event except the
   `PENALTY_SHOOTOUT`/`FINAL_WHISTLE` markers represents exactly one kick and MUST carry
   `team_side` (the kicking side) and `actor_id` (the kicker, on-pitch for that side) — a
-  missed/saved kick's type is `NOTHING`, but its actor is still the kicker. The one
-  exception is `OWN_GOAL`, whose actor stays the opposing keeper per the own-goal rule,
-  with the kicking side still identified by `team_side`. Code owns the kick order; the
+  missed/saved kick's type is `NOTHING`, but its actor is still the kicker. Code owns the
+  kick order; the
   validator rejects a kick attributed to the side whose turn it is not. This attribution is
   what makes the derived tally and the mathematically-decided stop condition (best-of-5 →
   sudden death, R8) computable from the event stream alone.
@@ -135,3 +140,5 @@ These become `test_validate.py` cases:
 13. During `period == SHOOTOUT`: a kick event (`GOAL` or miss-`NOTHING`) with a null
     `team_side` or `actor_id`, or attributed to the side whose turn it is not → MUST reject
     (kick attribution is what the derived tally and stop condition are computed from).
+14. `OWN_GOAL` proposed while `period == SHOOTOUT` → MUST reject (no own goals in a real
+    shootout; a deflected-in kick is simply the kicker's `GOAL`).

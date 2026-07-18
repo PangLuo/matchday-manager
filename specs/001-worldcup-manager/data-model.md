@@ -18,8 +18,9 @@ described conceptually; types shown are indicative. Persisted shapes live in
   to, **set by code** from the match's current phase (never by the model). Replay uses it to
   keep penalty-shootout kicks out of the regulation scoreline: a `GOAL` in `REGULATION`/
   `EXTRA_TIME` increments the match score, whereas a `GOAL` in `SHOOTOUT` increments the
-  (derived) shootout tally instead. It is the persisted, per-event counterpart of the
-  `is_extra_time` live-state flag.
+  (derived) shootout tally instead. It is stamped verbatim from the match's live
+  `current_period` state, which advances `REGULATION → EXTRA_TIME → SHOOTOUT` as the
+  period-marker events commit.
 
 ## Core entities
 
@@ -74,7 +75,9 @@ The player's per-match selection.
 One fixture. Managed matches carry a live moment stream; AI-vs-AI matches are quick-resolved.
 - `id`, `phase: Phase`, `home_team`, `away_team`, `matchday`
 - **Live state** (managed matches): `minute`/`moment_index`, `score`, `on_pitch[side]`,
-  `subs_used[side]`, `red_cards[side]`, per-player in-match yellows, `is_extra_time`
+  `subs_used[side]`, `red_cards[side]`, per-player in-match yellows,
+  `current_period: MatchPeriod` (advanced by period-marker events; the source `period` is
+  stamped from)
 - `events: list[MatchEvent]` (the resolved, ordered stream)
 - `result` (regulation-incl-extra-time score; `winner` and `decided_by` for knockouts; any
   penalty-shootout tally is derived by replaying `SHOOTOUT`-period events, not stored)
@@ -147,7 +150,7 @@ R32 --> R16 --> QF --> SF --> THIRD_PLACE --> FINAL --(final resolved)--> DONE
 
 ### Match lifecycle (managed match — `match/engine.py`)
 ```
-KICKOFF -> [CHANCE|GOAL|FOUL|YELLOW|RED|INJURY|SUBSTITUTION|NOTHING]* -> HALF_TIME
+KICKOFF -> [CHANCE|GOAL|OWN_GOAL|FOUL|YELLOW|RED|INJURY|SUBSTITUTION|NOTHING]* -> HALF_TIME
         -> [...]* -> FULL_TIME
    (knockout & level) -> EXTRA_TIME -> [...]* -> (level) -> PENALTY_SHOOTOUT
         -> FINAL_WHISTLE (result recorded, events frozen)

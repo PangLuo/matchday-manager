@@ -123,6 +123,12 @@ and logged.
 surface. The fallback is also reused as the AI-vs-AI quick resolver's per-moment core, so
 one resolver serves both "model degraded" and "match we don't narrate."
 
+**Terminology note**: "deterministic" for the fallback and quick resolver means
+**model-free and code-owned**, not bit-identical across runs — both sample a local RNG
+(unseeded in live play, per R2/FR-009; seeded in tests, so under test they *are*
+reproducible). The guarantee is that they always produce a legal result without the model,
+not that they produce the same one.
+
 **Alternatives considered**:
 - *Unbounded retries* — rejected: can hang the game on a persistent outage.
 - *Abort the match on failure* — rejected: violates "never blocks," corrupts tournament
@@ -195,9 +201,11 @@ fixed seed to exercise the draw (principle 3).
 **Decision**: Level knockout matches continue to **extra time** (two further periods of
 moments, resolved by the same per-moment engine as regular play) and, if still level, a
 **penalty shootout**. Each kick is itself an ordinary moment through the same
-provider-proposes/code-validates/fallback-on-failure loop (R5/R6) — with a kick-specific
-event outcome (e.g. goal, save, wide, high, post, rebound goal, own goal — final set is the
-model's/validator's call, not fixed here) rather than a flat score/miss coin-flip — so kicks carry the same narrative nuance as in-game chances. Code
+provider-proposes/code-validates/fallback-on-failure loop (R5/R6). As in the real shootout,
+a kick resolves to either a goal or a miss (no rebounds, no own goals — `OWN_GOAL` is
+illegal during the shootout); the *manner* of a miss (saved, wide, high, off the post) lives
+in the event's `commentary` rather than a flat score/miss coin-flip, so kicks carry the same
+narrative nuance as in-game chances. Code
 bounds the shootout by ordinary kick-count bookkeeping (best-of-5 per side, then sudden
 death, stopping as soon as the result is mathematically decided), which is what guarantees
 **exactly one winner** (FR-023), not a constraint on what each kick's outcome can be. That
@@ -212,15 +220,15 @@ penalty tally, never `result.home/away` (see data-model.md and contracts/event-s
 **Rationale**: Mirrors real 2026 knockout rules and guarantees single-winner progression by
 reusing the one per-moment engine implementation everywhere instead of introducing a second,
 narrower resolution path just for shootouts. It also means a shootout degrades the same way
-regular play does: bounded retries then the deterministic fallback (R5), whose outcome
-distribution is broadened beyond score/miss so a model-down shootout still feels plausible.
+regular play does: bounded retries then the deterministic fallback (R5), whose miss
+commentary varies (saved, wide, high, off the post) so a model-down shootout still feels
+plausible.
 
 **Alternatives considered**:
 - *Bespoke attribute-weighted deterministic-with-RNG shootout resolver, separate from the
   moment engine* — rejected: duplicates the provider/validate/fallback/retry machinery R5
-  already provides, and collapses the kick outcome to a binary score/miss when the real
-  event space (e.g. wide, high, post, save, rebound goal, own goal) is exactly the kind of
-  judgment call ordinary moments already handle.
+  already provides, and flattens each kick to a bare score/miss with none of the narrative
+  nuance (saved, wide, high, off the post) that ordinary moments already handle.
 - *Coin-flip resolution* — rejected: ignores squad quality and feels arbitrary.
 - *Replay matches* — rejected: not the tournament format.
 
