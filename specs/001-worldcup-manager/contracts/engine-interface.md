@@ -72,7 +72,8 @@ def propose_callups(team: TeamState, needs: list[Position], prompt_version: str)
 ```
 
 - **Code computes `needs`** (how many players, which positions) from the availability floor
-  check (11 starters + a 5-player bench); the model proposes only each replacement's name
+  check (11 starters + the fixture's bench floor — 5 in the group stage, 6 in a knockout); the
+  model proposes only each replacement's name
   and attribute values.
 - Validation (code): position as requested; attributes within a code-defined modest band
   (below the squad's average rating); name non-empty and unique in the squad. `id` is

@@ -239,7 +239,7 @@ plausible.
 `accumulated_yellows` counter. Transitions applied at match end and decremented as matches
 are served, restoring availability at zero (FR-017/018/019). Yellow rule: two yellows in
 separate matches → one-match ban; accumulated yellows **cleared after the quarter-finals**.
-Red (straight or second-yellow) → at least a one-match ban. Injury duration per R2/plan
+Red (straight or second-yellow) → at least a one-match ban. Injury duration per plan
 open-decision #2.
 
 **Rationale**: Encapsulates all cross-match player state in one tested module (principle 3),
@@ -286,8 +286,9 @@ keeps tables filling even during a model outage (principle 4). Flagged as plan o
 
 ## R12. Emergency call-up player generation (FR-028)
 
-**Decision**: When the between-match floor check (11 available starters + a 5-player bench,
-FR-028) fails, **code decides** how many replacement players are needed and at which
+**Decision**: When the between-match floor check (11 available starters + a bench matching the
+fixture's substitution allowance — 5 in the group stage, 6 in the knockouts, FR-028) fails,
+**code decides** how many replacement players are needed and at which
 positions; the **model generates** each replacement's flavor — name and attribute values —
 through the same propose→validate→commit pattern as match events (structured output via
 `messages.parse()`). Code validates every proposal: the requested position is honored,

@@ -152,14 +152,20 @@ These arise from spec **Assumptions** the plan cannot settle unilaterally. All s
 are now resolved (proposed defaults accepted); kept here as a record of the decision:
 
 1. **Fieldable-XI depletion recovery (spec Edge Cases / FR-028). RESOLVED.** When a managed
-   team has fewer than 11 available starters plus a 5-player bench (the max substitutions
-   FR-012 permits), the game performs a minimal **emergency call-up**: it adds just enough
+   team has fewer than 11 available starters plus a bench covering that fixture's substitution
+   allowance, the game performs a minimal **emergency call-up**: it adds just enough
    replacement players (drawn from a generic reserve pool, not a transfer/market mechanic —
    stays within the "no transfers" scope guardrail) to the squad to reach that floor, and
    surfaces this to the player loudly as a rare event. The bench floor matters as much as the
    starters: topping up to exactly 11 would leave a depleted team with zero substitutes,
    meaning the next injury or red card strands them a player short for the rest of that
-   match and every match after. This replaces the earlier "start short down to a floor of 7"
+   match and every match after. The bench floor is sized to the **maximum** substitutions the
+   fixture can permit under FR-012 — **five** in a group match (a floor of 16 available
+   players) and **six** for a knockout match, which can reach extra time (a floor of 17) — so
+   a floored team is never denied a substitution the rules would otherwise grant it. Reaching
+   the floor at all is near-impossible given a full 26-man squad (min 23, including ≥3
+   goalkeepers); pegging the knockout floor to six costs at most one extra generated reserve
+   on this last-resort path and removes the extra-time edge case entirely. This replaces the earlier "start short down to a floor of 7"
    and "risk a lightly-injured player" options — the between-match lineup screen never needs
    to accept an illegal, short, or subless lineup. Replacement-player data (name, attributes)
    is **generated on the fly by the model** and validated/bounded by code, with a

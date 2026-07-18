@@ -31,7 +31,9 @@ Represents one squad member.
   `injury_proneness`) — **data only**: passed into the model prompt to inform its event
   decision (including penalty-kick moments), and used to weight the fallback resolver's
   code RNG when a moment degrades; never game logic.
-- `availability: AvailabilityStatus`
+- A player's live availability is **not** stored on `Player`; it lives in the tournament's
+  `players_availability` table (looked up by `id` — see Tournament), keeping `Player` stable
+  reference data and availability in one place.
 - `emergency_callup: bool` — `true` for an FR-028 replacement generated on the fly
   (research R12); drives the loud call-up surface. Call-ups are appended to the squad,
   persisted, and never regenerated on reload.
@@ -86,13 +88,14 @@ One fixture. Managed matches carry a live moment stream; AI-vs-AI matches are qu
 ### MatchEvent
 One discrete moment's outcome — the atomic unit of a match (FR-007/008).
 - `moment_index`, `minute`, `type: EventType`, `commentary: str`
-- `actor: Optional[PlayerRef]`, `secondary: Optional[PlayerRef]` (e.g. assist, fouled
-  player, sub-in), `team_side`
+- `actor_id: Optional[str]`, `secondary_id: Optional[str]` — player ids (e.g. `secondary_id`
+  is the assist, fouled player, or sub-in), `team_side`
 - `period: MatchPeriod` — code-set phase tag (see enum); how replay separates a shootout
   kick from a regulation goal
 - `source: EventSource`
-- **Invariants** (enforced in `match/validate.py`): actor is on the pitch for `team_side`,
-  **except `OWN_GOAL`** where actor is on the pitch for the side *opposite* `team_side`;
+- **Invariants** (enforced in `match/validate.py`): the `actor_id` player is on the pitch for
+  `team_side`, **except `OWN_GOAL`** where they are on the pitch for the side *opposite*
+  `team_side`;
   type is legal for current state; card/injury/sub effects are internally consistent.
 
 ### Substitution
@@ -114,7 +117,10 @@ One discrete moment's outcome — the atomic unit of a match (FR-007/008).
 - `groups: list[Group]`
 - `fixtures: list[Match]`
 - `bracket` (knockout pairings once seeded)
-- `players_availability` (id → AvailabilityStatus) — the carry-forward table
+- `players_availability` (id → AvailabilityStatus) — the carry-forward table and the
+  **single source of truth** for availability; consumers (e.g. `lineup.py`'s available-players
+  check) look it up by player id, never off `Player`. Serialized as the save's top-level
+  `availability` map (`save-file-schema.md`).
 - `prompt_version: str` and engine I/O log reference
 - **Relationships**: owns everything; is the unit of save/load.
 
