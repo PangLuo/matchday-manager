@@ -64,7 +64,8 @@ for logging/tests.
 - `NOTHING` / period markers (`KICKOFF`, `HALF_TIME`, `FULL_TIME`, `EXTRA_TIME`,
   `PENALTY_SHOOTOUT`, `FINAL_WHISTLE`): no actor required; always legal when the clock is in
   the right phase. A period marker also advances the code-owned `period` (`EXTRA_TIME` →
-  `EXTRA_TIME`, `PENALTY_SHOOTOUT` → `SHOOTOUT`).
+  `EXTRA_TIME`, `PENALTY_SHOOTOUT` → `SHOOTOUT`). **Exception**: during `SHOOTOUT`, a
+  `NOTHING` is a missed kick and the kick-attribution rules below apply.
 
 ### Period & shootout (research R8)
 - Code stamps every committed event with `period` from the match's current phase; the model
@@ -73,6 +74,15 @@ for logging/tests.
   `period == SHOOTOUT`. A scored kick is a `GOAL` (or `OWN_GOAL` off the keeper); a miss/save
   is a `NOTHING` whose nuance lives in `commentary` (R8 leaves the kick-outcome vocabulary
   open). Their goals increment the **shootout tally**, never the regulation score.
+- **Kick attribution (required during `SHOOTOUT`)**: every committed event except the
+  `PENALTY_SHOOTOUT`/`FINAL_WHISTLE` markers represents exactly one kick and MUST carry
+  `team_side` (the kicking side) and `actor_id` (the kicker, on-pitch for that side) — a
+  missed/saved kick's type is `NOTHING`, but its actor is still the kicker. The one
+  exception is `OWN_GOAL`, whose actor stays the opposing keeper per the own-goal rule,
+  with the kicking side still identified by `team_side`. Code owns the kick order; the
+  validator rejects a kick attributed to the side whose turn it is not. This attribution is
+  what makes the derived tally and the mathematically-decided stop condition (best-of-5 →
+  sudden death, R8) computable from the event stream alone.
 - The shootout tally is **derived** by replaying `SHOOTOUT`-period goals — it is not stored.
 - `result.decided_by` is stored, but for managed matches it is a validated cache: the loader
   re-derives it — `penalties` if any `SHOOTOUT` event exists, else `extra_time` if any
@@ -122,3 +132,6 @@ These become `test_validate.py` cases:
     or with a non-null `secondary_id` (no assist on an own goal).
 12. `SUBSTITUTION` proposed while `period == SHOOTOUT` → MUST reject (subs are closed once the
     shootout begins).
+13. During `period == SHOOTOUT`: a kick event (`GOAL` or miss-`NOTHING`) with a null
+    `team_side` or `actor_id`, or attributed to the side whose turn it is not → MUST reject
+    (kick attribution is what the derived tally and stop condition are computed from).

@@ -200,7 +200,10 @@ event outcome (e.g. goal, save, wide, high, post, rebound goal, own goal — fin
 model's/validator's call, not fixed here) rather than a flat score/miss coin-flip — so kicks carry the same narrative nuance as in-game chances. Code
 bounds the shootout by ordinary kick-count bookkeeping (best-of-5 per side, then sudden
 death, stopping as soon as the result is mathematically decided), which is what guarantees
-**exactly one winner** (FR-023), not a constraint on what each kick's outcome can be. The
+**exactly one winner** (FR-023), not a constraint on what each kick's outcome can be. That
+bookkeeping needs every kick — scored or missed — attributed: during the shootout the
+validator requires `team_side` and `actor_id` on every kick event and enforces the
+code-owned kick order (see event-schema.md, Period & shootout). The
 **sixth substitution** unlocks when a match reaches extra time (FR-012). Every committed
 event is code-tagged with its `MatchPeriod` (`REGULATION | EXTRA_TIME | SHOOTOUT`) so replay
 keeps shootout kicks out of the regulation scoreline: a `SHOOTOUT` goal feeds the derived
