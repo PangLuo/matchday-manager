@@ -20,7 +20,11 @@ described conceptually; types shown are indicative. Persisted shapes live in
   `EXTRA_TIME` increments the match score, whereas a `GOAL` in `SHOOTOUT` increments the
   (derived) shootout tally instead. It is stamped verbatim from the match's live
   `current_period` state, which advances `REGULATION → EXTRA_TIME → SHOOTOUT` as the
-  period-marker events commit.
+  period-marker events commit. For the two period-advancing markers themselves, the
+  **advance happens before the stamp**: a marker belongs to the period it *opens*, so the
+  `EXTRA_TIME` event is tagged `period: EXTRA_TIME` and the `PENALTY_SHOOTOUT` event
+  `period: SHOOTOUT` (which is why event-schema.md's shootout kick-attribution rule must
+  exempt that marker).
 
 ## Core entities
 
@@ -81,8 +85,10 @@ One fixture. Managed matches carry a live moment stream; AI-vs-AI matches are qu
   `current_period: MatchPeriod` (advanced by period-marker events; the source `period` is
   stamped from)
 - `events: list[MatchEvent]` (the resolved, ordered stream)
-- `result` (regulation-incl-extra-time score; `winner` and `decided_by` for knockouts; any
-  penalty-shootout tally is derived by replaying `SHOOTOUT`-period events, not stored)
+- `result` (regulation-incl-extra-time score; `winner` and `decided_by` stored for every
+  match — `winner` is `null` for a drawn group match, `decided_by` is `normal` outside the
+  knockouts; any penalty-shootout tally is derived by replaying `SHOOTOUT`-period events,
+  not stored)
 - **Relationships**: two `Team`s; produces many `MatchEvent`s and `Substitution`s.
 
 ### MatchEvent
@@ -158,8 +164,9 @@ R32 --> R16 --> QF --> SF --> THIRD_PLACE --> FINAL --(final resolved)--> DONE
 ```
 KICKOFF -> [CHANCE|GOAL|OWN_GOAL|FOUL|YELLOW|RED|INJURY|SUBSTITUTION|NOTHING]* -> HALF_TIME
         -> [...]* -> FULL_TIME
-   (knockout & level) -> EXTRA_TIME -> [...]* -> (level) -> PENALTY_SHOOTOUT
-        -> FINAL_WHISTLE (result recorded, events frozen)
+   (knockout & level) -> EXTRA_TIME -> [...]* -> HALF_TIME (period: EXTRA_TIME) -> [...]*
+        -> (level) -> PENALTY_SHOOTOUT
+        -> [kick moments: GOAL | miss-NOTHING]* -> FINAL_WHISTLE (result recorded, events frozen)
 ```
 Substitution windows open at each moment boundary (spec Assumption). Every committed event
 originates from `provider→validate` or, after retries, `fallback`.

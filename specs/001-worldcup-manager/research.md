@@ -199,7 +199,10 @@ fixed seed to exercise the draw (principle 3).
 ## R8. Knockout tie resolution
 
 **Decision**: Level knockout matches continue to **extra time** (two further periods of
-moments, resolved by the same per-moment engine as regular play) and, if still level, a
+moments, resolved by the same per-moment engine as regular play; the interval between them
+is the ordinary `HALF_TIME` marker, distinguished from the regulation interval by its
+code-stamped `period == EXTRA_TIME` — a pure clock marker, no new event type, never
+advancing the period) and, if still level, a
 **penalty shootout**. Each kick is itself an ordinary moment through the same
 provider-proposes/code-validates/fallback-on-failure loop (R5/R6). As in the real shootout,
 a kick resolves to either a goal or a miss (no rebounds, no own goals — `OWN_GOAL` is

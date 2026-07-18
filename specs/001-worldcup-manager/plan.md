@@ -135,6 +135,12 @@ tests/
     └── test_play_loop.py
 ```
 
+The `tests/` tree is **illustrative, not exhaustive**. The binding coverage commitments are
+the testability summary in `contracts/engine-interface.md` (which also requires unit tests
+for `fallback.resolve` legality invariants) and the Constitution Check above (the whole
+deterministic core — including `quick_resolver` and `formations` — is unit-tested), even
+where no matching test file is sketched.
+
 **Structure Decision**: Single-project CLI. The core (`models`, `tournament`, `knockout`,
 `availability`, `lineup`, `formations`, `quick_resolver`) is pure and model-free. The
 `match/` sub-package isolates the one risky, model-touching part behind a single seam

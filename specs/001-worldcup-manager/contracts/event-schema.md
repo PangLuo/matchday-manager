@@ -68,7 +68,12 @@ for logging/tests.
 - `NOTHING` / period markers (`KICKOFF`, `HALF_TIME`, `FULL_TIME`, `EXTRA_TIME`,
   `PENALTY_SHOOTOUT`, `FINAL_WHISTLE`): no actor required; always legal when the clock is in
   the right phase. A period marker also advances the code-owned `period` (`EXTRA_TIME` →
-  `EXTRA_TIME`, `PENALTY_SHOOTOUT` → `SHOOTOUT`). **Exception**: during `SHOOTOUT`, a
+  `EXTRA_TIME`, `PENALTY_SHOOTOUT` → `SHOOTOUT`); the advance happens **before** the
+  marker's own `period` stamp, so a period-advancing marker is tagged with the period it
+  opens (data-model.md, `MatchPeriod`). `HALF_TIME` occurs at the regulation
+  interval (minute 45) and again at the extra-time interval (minute 105), distinguished on
+  replay by the code-stamped `period` (`REGULATION` vs `EXTRA_TIME`); it is a pure clock
+  marker and never advances `current_period`. **Exception**: during `SHOOTOUT`, a
   `NOTHING` is a missed kick and the kick-attribution rules below apply.
 
 ### Period & shootout (research R8)
@@ -80,6 +85,10 @@ for logging/tests.
   there are no rebounds and no own goals — `OWN_GOAL` is illegal during `SHOOTOUT`
   (known-bad case #14). Shootout goals increment the **shootout tally**, never the
   regulation score.
+- **Event-type legality during `SHOOTOUT`**: the only legal types are `GOAL`, `NOTHING`
+  (a missed kick), and the `PENALTY_SHOOTOUT`/`FINAL_WHISTLE` markers — `CHANCE`, `FOUL`,
+  `YELLOW`, `RED`, `INJURY`, `SUBSTITUTION`, `OWN_GOAL`, and all other markers are rejected
+  (known-bad case #15).
 - **Kick attribution (required during `SHOOTOUT`)**: every committed event except the
   `PENALTY_SHOOTOUT`/`FINAL_WHISTLE` markers represents exactly one kick and MUST carry
   `team_side` (the kicking side) and `actor_id` (the kicker, on-pitch for that side) — a
@@ -142,3 +151,6 @@ These become `test_validate.py` cases:
     (kick attribution is what the derived tally and stop condition are computed from).
 14. `OWN_GOAL` proposed while `period == SHOOTOUT` → MUST reject (no own goals in a real
     shootout; a deflected-in kick is simply the kicker's `GOAL`).
+15. Any non-kick, non-marker type (`CHANCE`, `FOUL`, `YELLOW`, `RED`, `INJURY`, …) proposed
+    while `period == SHOOTOUT` → MUST reject (only `GOAL`, miss-`NOTHING`, and the
+    `PENALTY_SHOOTOUT`/`FINAL_WHISTLE` markers are legal during the shootout).

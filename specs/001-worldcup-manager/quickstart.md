@@ -39,7 +39,7 @@ Each scenario maps to spec success criteria / user stories. Run them to prove th
 1. `--new --team ENG`; open the squad — every player shows an availability status
    ([data-model.md](./data-model.md) → AvailabilityStatus).
 2. Try an **illegal** lineup (10 starters, or a player out of position) → kickoff is blocked
-   with an explanation ([contracts/event-schema.md] rules; FR-005).
+   with an explanation ([data-model.md](./data-model.md) → Lineup validation; FR-005).
 3. Submit a legal 4-3-3 → the match streams discrete moment events one at a time and ends
    with a score and match report (FR-007/008).
 **Pass**: a full match completes with a readable event stream and a final score.
