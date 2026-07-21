@@ -52,9 +52,11 @@ throughput/concurrency targets — one player, one match at a time.
 
 **Constraints**: Must always reach a valid result even with the model unavailable
 (bounded retries → deterministic fallback → surfaced degradation). Prompts are versioned
-and every engine input/output is logged. Match temperature is kept low for grounded
-commentary; cross-replay variety comes from fresh (unseeded) sampling per simulation, not
-from high temperature. No external services beyond the Claude API.
+and every engine input/output is logged. Match temperature is kept low — `MATCH_TEMPERATURE = 0.4` (defined in `match/prompt.py`
+alongside `PROMPT_VERSION`) — grounded enough for plausible commentary, but non-zero so
+fresh (unseeded) sampling per simulation still yields materially varied event streams across
+replays of the same fixture (FR-009); cross-replay variety comes from that fresh sampling,
+not from high temperature. No external services beyond the Claude API.
 
 **Scale/Scope**: 48 teams × 26 players; 12 groups of 4; 104 total tournament fixtures
 (including the third-place play-off), of which the player plays at most 8 (3 group + up to 5

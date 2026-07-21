@@ -164,7 +164,9 @@ R32 --> R16 --> QF --> SF --> THIRD_PLACE --> FINAL --(final resolved)--> DONE
 ```
 KICKOFF -> [CHANCE|GOAL|OWN_GOAL|FOUL|YELLOW|RED|INJURY|SUBSTITUTION|NOTHING]* -> HALF_TIME
         -> [...]* -> FULL_TIME
+   (group, or knockout already decided) -> FINAL_WHISTLE (result recorded, events frozen)
    (knockout & level) -> EXTRA_TIME -> [...]* -> HALF_TIME (period: EXTRA_TIME) -> [...]*
+        -> (decided) -> FINAL_WHISTLE
         -> (level) -> PENALTY_SHOOTOUT
         -> [kick moments: GOAL | miss-NOTHING]* -> FINAL_WHISTLE (result recorded, events frozen)
 ```
