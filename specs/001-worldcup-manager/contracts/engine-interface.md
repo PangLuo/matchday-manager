@@ -13,8 +13,8 @@ class EventProvider(Protocol):
 ```
 
 - **`ClaudeProvider`** (production, in `match/provider.py`): builds the versioned prompt
-  (`match/prompt.py`), calls `client.messages.parse(model="claude-haiku-4-5",
-  temperature≈0.6, output_config=...)`, returns a `ProposedEvent` or a `ProviderError` on
+  (`match/prompt.py`), calls the client with `model="claude-haiku-4-5",
+  temperature=MATCH_TEMPERATURE` (0.4), `output_config=...`, returns a `ProposedEvent` or a `ProviderError` on
   API failure/timeout. Constructed **only** in `cli.py` / production wiring.
 - **`FakeProvider`** (tests, in `match/provider.py` or `tests/`): returns scripted events —
   including deliberately known-bad ones and injected `ProviderError`s — with **no network**.

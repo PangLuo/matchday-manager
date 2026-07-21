@@ -6,7 +6,8 @@ Alternatives considered.**
 ## R1. Match-engine model choice
 
 **Decision**: Use **Claude Haiku 4.5** (`claude-haiku-4-5`) for per-moment event
-proposals, at a **low temperature** (~0.6). One request per discrete moment.
+proposals, at a **low temperature** (`MATCH_TEMPERATURE = 0.4`, defined in `match/prompt.py`).
+One request per discrete moment.
 
 **Rationale**: A managed-team match is many small, structured, low-stakes calls (one per
 moment). Haiku 4.5 is the cheapest/fastest tier ($1 / $5 per 1M tokens, 200K context) and
@@ -28,7 +29,7 @@ calls, which overrides the default of Opus.
 **Decision**: The **model decides what each moment is** — chance, foul, card, or nothing —
 reasoning over on-pitch player attributes, match progress, scoreline, and momentum; **code
 validates** the proposed event for legality (R4) and commits it. Keep temperature low
-(~0.6) for grounded commentary. Cross-replay variety (FR-009, SC-003) comes from (a)
+(`MATCH_TEMPERATURE = 0.4`) for grounded commentary. Cross-replay variety (FR-009, SC-003) comes from (a)
 unseeded stochastic sampling on each fresh simulation, and (b) an optional per-moment
 code-supplied "luck" value passed into the prompt as a variance nudge — randomness stays
 code-owned, but the *decision* is the model's. The attribute-weighted code RNG survives
