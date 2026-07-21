@@ -24,3 +24,8 @@ venv/
 
 # Claude Code local settings
 .claude/settings.local.json
+
+# Python build artifacts
+*.egg-info/
+build/
+dist/
