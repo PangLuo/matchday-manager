@@ -92,7 +92,7 @@ def _commit(state: MatchState, c: Committed, source: EventSource,
         state.score[c.score_side] += 1
     if c.shootout_side is not None:
         state.shootout[c.shootout_side] += 1
-    return MatchEvent(
+    event = MatchEvent(
         moment_index=moment_index,
         minute=minute,
         type=c.type,
@@ -103,6 +103,8 @@ def _commit(state: MatchState, c: Committed, source: EventSource,
         period=state.current_period,
         source=source,
     )
+    state.history.append(event)   # the model reads the full match so far (prompt.py)
+    return event
 
 
 def _resolve_moment(
@@ -161,6 +163,9 @@ def simulate_match(
     ):
         for minute in phase_minutes:
             state.minute = minute
+            # Per-moment luck nudge (research R2): signed, + favours home, - favours away.
+            # Drawn from the one injected RNG so live play varies and tests stay reproducible.
+            state.luck = round(fallback_rng.uniform(-1.0, 1.0), 2)
             c, source = _resolve_moment(state, provider, prompt_version, fallback_rng, log)
             degraded = degraded or source == EventSource.FALLBACK
             emit(c, source, minute)

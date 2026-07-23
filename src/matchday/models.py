@@ -225,6 +225,8 @@ class MatchState:
     extra_time_reached: bool = False
     minute: int = 0
     moment_index: int = 0
+    luck: float = 0.0                                       # code-supplied per-moment nudge
+    history: list["MatchEvent"] = field(default_factory=list)  # committed events so far
 
     def sub_limit(self, side: Side) -> int:
         return 6 if self.extra_time_reached else 5

@@ -92,6 +92,27 @@ def _play(state, provider, home_name, away_name, offline, interactive) -> None:
     print("\n" + build_report(outcome, home_name, away_name, state.players))
 
 
+def announce_engine(provider, state, offline: bool) -> None:
+    """One-shot probe so the player knows whether the live model or the fallback is driving.
+
+    Without this, an unavailable model (e.g. an unset ANTHROPIC_API_KEY) is silent: the
+    match still completes on the fallback engine and just reads flat. One extra proposal
+    call is cheap next to a full match.
+    """
+    if offline:
+        print("[offline] Deterministic fallback engine — no model calls.")
+        return
+    result = provider.propose(state, PROMPT_VERSION)
+    if isinstance(result, ProviderError):
+        print("[!] Live model unavailable — playing on the offline fallback engine, so\n"
+              "    commentary will read flat and generic.\n"
+              f"    Reason: {result.message}\n"
+              "    Fix: ensure the key is exported in THIS shell — "
+              "`export ANTHROPIC_API_KEY=sk-ant-...` (a plain `NAME=...` is not exported).")
+    else:
+        print("[live] Claude match engine connected.")
+
+
 def main(argv: Optional[list[str]] = None) -> int:
     parser = argparse.ArgumentParser(prog="matchday", description="World Cup 2026 Team Manager")
     parser.add_argument("--new", action="store_true", help="start a new game")
@@ -137,6 +158,7 @@ def main(argv: Optional[list[str]] = None) -> int:
 
     state = build_match_state(home_lineup, away_lineup, home.id, away.id, fixture.phase)
     provider, offline = _make_provider(args.offline)
+    announce_engine(provider, state, offline)
     _play(state, provider, home.name, away.name, offline, interactive=not args.auto)
     return 0
 
