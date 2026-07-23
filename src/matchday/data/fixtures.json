@@ -1,284 +1,284 @@
 {
   "group_stage": [
     {
-      "id": "m_A_1_ARG",
+      "id": "m_A_1_MEX",
       "phase": "GROUP",
       "group_id": "A",
       "matchday": 1,
-      "home": "ARG",
-      "away": "COL"
+      "home": "MEX",
+      "away": "RSA"
     },
     {
-      "id": "m_A_1_AUT",
+      "id": "m_A_1_KOR",
       "phase": "GROUP",
       "group_id": "A",
       "matchday": 1,
-      "home": "AUT",
-      "away": "CMR"
+      "home": "KOR",
+      "away": "CZE"
     },
     {
-      "id": "m_A_2_ARG",
+      "id": "m_A_2_MEX",
       "phase": "GROUP",
       "group_id": "A",
       "matchday": 2,
-      "home": "ARG",
-      "away": "AUT"
+      "home": "MEX",
+      "away": "KOR"
     },
     {
-      "id": "m_A_2_CMR",
+      "id": "m_A_2_CZE",
       "phase": "GROUP",
       "group_id": "A",
       "matchday": 2,
-      "home": "CMR",
-      "away": "COL"
+      "home": "CZE",
+      "away": "RSA"
     },
     {
-      "id": "m_A_3_ARG",
+      "id": "m_A_3_MEX",
       "phase": "GROUP",
       "group_id": "A",
-      "matchday": 3,
-      "home": "ARG",
-      "away": "CMR"
-    },
-    {
-      "id": "m_A_3_COL",
-      "phase": "GROUP",
-      "group_id": "A",
-      "matchday": 3,
-      "home": "COL",
-      "away": "AUT"
-    },
-    {
-      "id": "m_B_1_FRA",
-      "phase": "GROUP",
-      "group_id": "B",
-      "matchday": 1,
-      "home": "FRA",
-      "away": "MAR"
-    },
-    {
-      "id": "m_B_1_UKR",
-      "phase": "GROUP",
-      "group_id": "B",
-      "matchday": 1,
-      "home": "UKR",
-      "away": "GHA"
-    },
-    {
-      "id": "m_B_2_FRA",
-      "phase": "GROUP",
-      "group_id": "B",
-      "matchday": 2,
-      "home": "FRA",
-      "away": "UKR"
-    },
-    {
-      "id": "m_B_2_GHA",
-      "phase": "GROUP",
-      "group_id": "B",
-      "matchday": 2,
-      "home": "GHA",
-      "away": "MAR"
-    },
-    {
-      "id": "m_B_3_FRA",
-      "phase": "GROUP",
-      "group_id": "B",
-      "matchday": 3,
-      "home": "FRA",
-      "away": "GHA"
-    },
-    {
-      "id": "m_B_3_MAR",
-      "phase": "GROUP",
-      "group_id": "B",
-      "matchday": 3,
-      "home": "MAR",
-      "away": "UKR"
-    },
-    {
-      "id": "m_C_1_ESP",
-      "phase": "GROUP",
-      "group_id": "C",
-      "matchday": 1,
-      "home": "ESP",
-      "away": "USA"
-    },
-    {
-      "id": "m_C_1_SWE",
-      "phase": "GROUP",
-      "group_id": "C",
-      "matchday": 1,
-      "home": "SWE",
-      "away": "CIV"
-    },
-    {
-      "id": "m_C_2_ESP",
-      "phase": "GROUP",
-      "group_id": "C",
-      "matchday": 2,
-      "home": "ESP",
-      "away": "SWE"
-    },
-    {
-      "id": "m_C_2_CIV",
-      "phase": "GROUP",
-      "group_id": "C",
-      "matchday": 2,
-      "home": "CIV",
-      "away": "USA"
-    },
-    {
-      "id": "m_C_3_ESP",
-      "phase": "GROUP",
-      "group_id": "C",
-      "matchday": 3,
-      "home": "ESP",
-      "away": "CIV"
-    },
-    {
-      "id": "m_C_3_USA",
-      "phase": "GROUP",
-      "group_id": "C",
-      "matchday": 3,
-      "home": "USA",
-      "away": "SWE"
-    },
-    {
-      "id": "m_D_1_ENG",
-      "phase": "GROUP",
-      "group_id": "D",
-      "matchday": 1,
-      "home": "ENG",
-      "away": "MEX"
-    },
-    {
-      "id": "m_D_1_WAL",
-      "phase": "GROUP",
-      "group_id": "D",
-      "matchday": 1,
-      "home": "WAL",
-      "away": "QAT"
-    },
-    {
-      "id": "m_D_2_ENG",
-      "phase": "GROUP",
-      "group_id": "D",
-      "matchday": 2,
-      "home": "ENG",
-      "away": "WAL"
-    },
-    {
-      "id": "m_D_2_QAT",
-      "phase": "GROUP",
-      "group_id": "D",
-      "matchday": 2,
-      "home": "QAT",
-      "away": "MEX"
-    },
-    {
-      "id": "m_D_3_ENG",
-      "phase": "GROUP",
-      "group_id": "D",
-      "matchday": 3,
-      "home": "ENG",
-      "away": "QAT"
-    },
-    {
-      "id": "m_D_3_MEX",
-      "phase": "GROUP",
-      "group_id": "D",
       "matchday": 3,
       "home": "MEX",
-      "away": "WAL"
+      "away": "CZE"
     },
     {
-      "id": "m_E_1_BRA",
+      "id": "m_A_3_RSA",
       "phase": "GROUP",
-      "group_id": "E",
+      "group_id": "A",
+      "matchday": 3,
+      "home": "RSA",
+      "away": "KOR"
+    },
+    {
+      "id": "m_B_1_CAN",
+      "phase": "GROUP",
+      "group_id": "B",
       "matchday": 1,
-      "home": "BRA",
+      "home": "CAN",
+      "away": "BIH"
+    },
+    {
+      "id": "m_B_1_QAT",
+      "phase": "GROUP",
+      "group_id": "B",
+      "matchday": 1,
+      "home": "QAT",
       "away": "SUI"
     },
     {
-      "id": "m_E_1_POL",
+      "id": "m_B_2_CAN",
       "phase": "GROUP",
-      "group_id": "E",
-      "matchday": 1,
-      "home": "POL",
-      "away": "KSA"
-    },
-    {
-      "id": "m_E_2_BRA",
-      "phase": "GROUP",
-      "group_id": "E",
+      "group_id": "B",
       "matchday": 2,
-      "home": "BRA",
-      "away": "POL"
+      "home": "CAN",
+      "away": "QAT"
     },
     {
-      "id": "m_E_2_KSA",
+      "id": "m_B_2_SUI",
       "phase": "GROUP",
-      "group_id": "E",
+      "group_id": "B",
       "matchday": 2,
-      "home": "KSA",
-      "away": "SUI"
-    },
-    {
-      "id": "m_E_3_BRA",
-      "phase": "GROUP",
-      "group_id": "E",
-      "matchday": 3,
-      "home": "BRA",
-      "away": "KSA"
-    },
-    {
-      "id": "m_E_3_SUI",
-      "phase": "GROUP",
-      "group_id": "E",
-      "matchday": 3,
       "home": "SUI",
-      "away": "POL"
+      "away": "BIH"
     },
     {
-      "id": "m_F_1_POR",
+      "id": "m_B_3_CAN",
+      "phase": "GROUP",
+      "group_id": "B",
+      "matchday": 3,
+      "home": "CAN",
+      "away": "SUI"
+    },
+    {
+      "id": "m_B_3_BIH",
+      "phase": "GROUP",
+      "group_id": "B",
+      "matchday": 3,
+      "home": "BIH",
+      "away": "QAT"
+    },
+    {
+      "id": "m_C_1_BRA",
+      "phase": "GROUP",
+      "group_id": "C",
+      "matchday": 1,
+      "home": "BRA",
+      "away": "MAR"
+    },
+    {
+      "id": "m_C_1_HAI",
+      "phase": "GROUP",
+      "group_id": "C",
+      "matchday": 1,
+      "home": "HAI",
+      "away": "SCO"
+    },
+    {
+      "id": "m_C_2_BRA",
+      "phase": "GROUP",
+      "group_id": "C",
+      "matchday": 2,
+      "home": "BRA",
+      "away": "HAI"
+    },
+    {
+      "id": "m_C_2_SCO",
+      "phase": "GROUP",
+      "group_id": "C",
+      "matchday": 2,
+      "home": "SCO",
+      "away": "MAR"
+    },
+    {
+      "id": "m_C_3_BRA",
+      "phase": "GROUP",
+      "group_id": "C",
+      "matchday": 3,
+      "home": "BRA",
+      "away": "SCO"
+    },
+    {
+      "id": "m_C_3_MAR",
+      "phase": "GROUP",
+      "group_id": "C",
+      "matchday": 3,
+      "home": "MAR",
+      "away": "HAI"
+    },
+    {
+      "id": "m_D_1_USA",
+      "phase": "GROUP",
+      "group_id": "D",
+      "matchday": 1,
+      "home": "USA",
+      "away": "PAR"
+    },
+    {
+      "id": "m_D_1_AUS",
+      "phase": "GROUP",
+      "group_id": "D",
+      "matchday": 1,
+      "home": "AUS",
+      "away": "TUR"
+    },
+    {
+      "id": "m_D_2_USA",
+      "phase": "GROUP",
+      "group_id": "D",
+      "matchday": 2,
+      "home": "USA",
+      "away": "AUS"
+    },
+    {
+      "id": "m_D_2_TUR",
+      "phase": "GROUP",
+      "group_id": "D",
+      "matchday": 2,
+      "home": "TUR",
+      "away": "PAR"
+    },
+    {
+      "id": "m_D_3_USA",
+      "phase": "GROUP",
+      "group_id": "D",
+      "matchday": 3,
+      "home": "USA",
+      "away": "TUR"
+    },
+    {
+      "id": "m_D_3_PAR",
+      "phase": "GROUP",
+      "group_id": "D",
+      "matchday": 3,
+      "home": "PAR",
+      "away": "AUS"
+    },
+    {
+      "id": "m_E_1_GER",
+      "phase": "GROUP",
+      "group_id": "E",
+      "matchday": 1,
+      "home": "GER",
+      "away": "CUW"
+    },
+    {
+      "id": "m_E_1_CIV",
+      "phase": "GROUP",
+      "group_id": "E",
+      "matchday": 1,
+      "home": "CIV",
+      "away": "ECU"
+    },
+    {
+      "id": "m_E_2_GER",
+      "phase": "GROUP",
+      "group_id": "E",
+      "matchday": 2,
+      "home": "GER",
+      "away": "CIV"
+    },
+    {
+      "id": "m_E_2_ECU",
+      "phase": "GROUP",
+      "group_id": "E",
+      "matchday": 2,
+      "home": "ECU",
+      "away": "CUW"
+    },
+    {
+      "id": "m_E_3_GER",
+      "phase": "GROUP",
+      "group_id": "E",
+      "matchday": 3,
+      "home": "GER",
+      "away": "ECU"
+    },
+    {
+      "id": "m_E_3_CUW",
+      "phase": "GROUP",
+      "group_id": "E",
+      "matchday": 3,
+      "home": "CUW",
+      "away": "CIV"
+    },
+    {
+      "id": "m_F_1_NED",
       "phase": "GROUP",
       "group_id": "F",
       "matchday": 1,
-      "home": "POR",
+      "home": "NED",
       "away": "JPN"
     },
     {
-      "id": "m_F_1_SRB",
+      "id": "m_F_1_SWE",
       "phase": "GROUP",
       "group_id": "F",
       "matchday": 1,
-      "home": "SRB",
-      "away": "CRC"
+      "home": "SWE",
+      "away": "TUN"
     },
     {
-      "id": "m_F_2_POR",
+      "id": "m_F_2_NED",
       "phase": "GROUP",
       "group_id": "F",
       "matchday": 2,
-      "home": "POR",
-      "away": "SRB"
+      "home": "NED",
+      "away": "SWE"
     },
     {
-      "id": "m_F_2_CRC",
+      "id": "m_F_2_TUN",
       "phase": "GROUP",
       "group_id": "F",
       "matchday": 2,
-      "home": "CRC",
+      "home": "TUN",
       "away": "JPN"
     },
     {
-      "id": "m_F_3_POR",
+      "id": "m_F_3_NED",
       "phase": "GROUP",
       "group_id": "F",
       "matchday": 3,
-      "home": "POR",
-      "away": "CRC"
+      "home": "NED",
+      "away": "TUN"
     },
     {
       "id": "m_F_3_JPN",
@@ -286,127 +286,127 @@
       "group_id": "F",
       "matchday": 3,
       "home": "JPN",
-      "away": "SRB"
+      "away": "SWE"
     },
     {
-      "id": "m_G_1_NED",
+      "id": "m_G_1_BEL",
       "phase": "GROUP",
       "group_id": "G",
       "matchday": 1,
-      "home": "NED",
-      "away": "SEN"
-    },
-    {
-      "id": "m_G_1_EGY",
-      "phase": "GROUP",
-      "group_id": "G",
-      "matchday": 1,
-      "home": "EGY",
-      "away": "PAN"
-    },
-    {
-      "id": "m_G_2_NED",
-      "phase": "GROUP",
-      "group_id": "G",
-      "matchday": 2,
-      "home": "NED",
+      "home": "BEL",
       "away": "EGY"
     },
     {
-      "id": "m_G_2_PAN",
+      "id": "m_G_1_IRN",
+      "phase": "GROUP",
+      "group_id": "G",
+      "matchday": 1,
+      "home": "IRN",
+      "away": "NZL"
+    },
+    {
+      "id": "m_G_2_BEL",
       "phase": "GROUP",
       "group_id": "G",
       "matchday": 2,
-      "home": "PAN",
-      "away": "SEN"
-    },
-    {
-      "id": "m_G_3_NED",
-      "phase": "GROUP",
-      "group_id": "G",
-      "matchday": 3,
-      "home": "NED",
-      "away": "PAN"
-    },
-    {
-      "id": "m_G_3_SEN",
-      "phase": "GROUP",
-      "group_id": "G",
-      "matchday": 3,
-      "home": "SEN",
-      "away": "EGY"
-    },
-    {
-      "id": "m_H_1_BEL",
-      "phase": "GROUP",
-      "group_id": "H",
-      "matchday": 1,
       "home": "BEL",
-      "away": "DEN"
-    },
-    {
-      "id": "m_H_1_NGA",
-      "phase": "GROUP",
-      "group_id": "H",
-      "matchday": 1,
-      "home": "NGA",
-      "away": "JAM"
-    },
-    {
-      "id": "m_H_2_BEL",
-      "phase": "GROUP",
-      "group_id": "H",
-      "matchday": 2,
-      "home": "BEL",
-      "away": "NGA"
-    },
-    {
-      "id": "m_H_2_JAM",
-      "phase": "GROUP",
-      "group_id": "H",
-      "matchday": 2,
-      "home": "JAM",
-      "away": "DEN"
-    },
-    {
-      "id": "m_H_3_BEL",
-      "phase": "GROUP",
-      "group_id": "H",
-      "matchday": 3,
-      "home": "BEL",
-      "away": "JAM"
-    },
-    {
-      "id": "m_H_3_DEN",
-      "phase": "GROUP",
-      "group_id": "H",
-      "matchday": 3,
-      "home": "DEN",
-      "away": "NGA"
-    },
-    {
-      "id": "m_I_1_ITA",
-      "phase": "GROUP",
-      "group_id": "I",
-      "matchday": 1,
-      "home": "ITA",
       "away": "IRN"
     },
     {
-      "id": "m_I_1_CAN",
+      "id": "m_G_2_NZL",
+      "phase": "GROUP",
+      "group_id": "G",
+      "matchday": 2,
+      "home": "NZL",
+      "away": "EGY"
+    },
+    {
+      "id": "m_G_3_BEL",
+      "phase": "GROUP",
+      "group_id": "G",
+      "matchday": 3,
+      "home": "BEL",
+      "away": "NZL"
+    },
+    {
+      "id": "m_G_3_EGY",
+      "phase": "GROUP",
+      "group_id": "G",
+      "matchday": 3,
+      "home": "EGY",
+      "away": "IRN"
+    },
+    {
+      "id": "m_H_1_ESP",
+      "phase": "GROUP",
+      "group_id": "H",
+      "matchday": 1,
+      "home": "ESP",
+      "away": "CPV"
+    },
+    {
+      "id": "m_H_1_KSA",
+      "phase": "GROUP",
+      "group_id": "H",
+      "matchday": 1,
+      "home": "KSA",
+      "away": "URU"
+    },
+    {
+      "id": "m_H_2_ESP",
+      "phase": "GROUP",
+      "group_id": "H",
+      "matchday": 2,
+      "home": "ESP",
+      "away": "KSA"
+    },
+    {
+      "id": "m_H_2_URU",
+      "phase": "GROUP",
+      "group_id": "H",
+      "matchday": 2,
+      "home": "URU",
+      "away": "CPV"
+    },
+    {
+      "id": "m_H_3_ESP",
+      "phase": "GROUP",
+      "group_id": "H",
+      "matchday": 3,
+      "home": "ESP",
+      "away": "URU"
+    },
+    {
+      "id": "m_H_3_CPV",
+      "phase": "GROUP",
+      "group_id": "H",
+      "matchday": 3,
+      "home": "CPV",
+      "away": "KSA"
+    },
+    {
+      "id": "m_I_1_FRA",
       "phase": "GROUP",
       "group_id": "I",
       "matchday": 1,
-      "home": "CAN",
+      "home": "FRA",
+      "away": "SEN"
+    },
+    {
+      "id": "m_I_1_IRQ",
+      "phase": "GROUP",
+      "group_id": "I",
+      "matchday": 1,
+      "home": "IRQ",
       "away": "NOR"
     },
     {
-      "id": "m_I_2_ITA",
+      "id": "m_I_2_FRA",
       "phase": "GROUP",
       "group_id": "I",
       "matchday": 2,
-      "home": "ITA",
-      "away": "CAN"
+      "home": "FRA",
+      "away": "IRQ"
     },
     {
       "id": "m_I_2_NOR",
@@ -414,167 +414,167 @@
       "group_id": "I",
       "matchday": 2,
       "home": "NOR",
-      "away": "IRN"
+      "away": "SEN"
     },
     {
-      "id": "m_I_3_ITA",
+      "id": "m_I_3_FRA",
       "phase": "GROUP",
       "group_id": "I",
       "matchday": 3,
-      "home": "ITA",
+      "home": "FRA",
       "away": "NOR"
     },
     {
-      "id": "m_I_3_IRN",
+      "id": "m_I_3_SEN",
       "phase": "GROUP",
       "group_id": "I",
       "matchday": 3,
-      "home": "IRN",
-      "away": "CAN"
+      "home": "SEN",
+      "away": "IRQ"
     },
     {
-      "id": "m_J_1_GER",
+      "id": "m_J_1_ARG",
       "phase": "GROUP",
       "group_id": "J",
       "matchday": 1,
-      "home": "GER",
-      "away": "KOR"
+      "home": "ARG",
+      "away": "ALG"
     },
     {
-      "id": "m_J_1_PER",
+      "id": "m_J_1_AUT",
       "phase": "GROUP",
       "group_id": "J",
       "matchday": 1,
-      "home": "PER",
-      "away": "TUR"
+      "home": "AUT",
+      "away": "JOR"
     },
     {
-      "id": "m_J_2_GER",
+      "id": "m_J_2_ARG",
       "phase": "GROUP",
       "group_id": "J",
       "matchday": 2,
-      "home": "GER",
-      "away": "PER"
+      "home": "ARG",
+      "away": "AUT"
     },
     {
-      "id": "m_J_2_TUR",
+      "id": "m_J_2_JOR",
       "phase": "GROUP",
       "group_id": "J",
       "matchday": 2,
-      "home": "TUR",
-      "away": "KOR"
+      "home": "JOR",
+      "away": "ALG"
     },
     {
-      "id": "m_J_3_GER",
+      "id": "m_J_3_ARG",
       "phase": "GROUP",
       "group_id": "J",
       "matchday": 3,
-      "home": "GER",
-      "away": "TUR"
+      "home": "ARG",
+      "away": "JOR"
     },
     {
-      "id": "m_J_3_KOR",
+      "id": "m_J_3_ALG",
       "phase": "GROUP",
       "group_id": "J",
       "matchday": 3,
-      "home": "KOR",
-      "away": "PER"
+      "home": "ALG",
+      "away": "AUT"
     },
     {
-      "id": "m_K_1_CRO",
+      "id": "m_K_1_POR",
       "phase": "GROUP",
       "group_id": "K",
       "matchday": 1,
+      "home": "POR",
+      "away": "COD"
+    },
+    {
+      "id": "m_K_1_UZB",
+      "phase": "GROUP",
+      "group_id": "K",
+      "matchday": 1,
+      "home": "UZB",
+      "away": "COL"
+    },
+    {
+      "id": "m_K_2_POR",
+      "phase": "GROUP",
+      "group_id": "K",
+      "matchday": 2,
+      "home": "POR",
+      "away": "UZB"
+    },
+    {
+      "id": "m_K_2_COL",
+      "phase": "GROUP",
+      "group_id": "K",
+      "matchday": 2,
+      "home": "COL",
+      "away": "COD"
+    },
+    {
+      "id": "m_K_3_POR",
+      "phase": "GROUP",
+      "group_id": "K",
+      "matchday": 3,
+      "home": "POR",
+      "away": "COL"
+    },
+    {
+      "id": "m_K_3_COD",
+      "phase": "GROUP",
+      "group_id": "K",
+      "matchday": 3,
+      "home": "COD",
+      "away": "UZB"
+    },
+    {
+      "id": "m_L_1_ENG",
+      "phase": "GROUP",
+      "group_id": "L",
+      "matchday": 1,
+      "home": "ENG",
+      "away": "CRO"
+    },
+    {
+      "id": "m_L_1_GHA",
+      "phase": "GROUP",
+      "group_id": "L",
+      "matchday": 1,
+      "home": "GHA",
+      "away": "PAN"
+    },
+    {
+      "id": "m_L_2_ENG",
+      "phase": "GROUP",
+      "group_id": "L",
+      "matchday": 2,
+      "home": "ENG",
+      "away": "GHA"
+    },
+    {
+      "id": "m_L_2_PAN",
+      "phase": "GROUP",
+      "group_id": "L",
+      "matchday": 2,
+      "home": "PAN",
+      "away": "CRO"
+    },
+    {
+      "id": "m_L_3_ENG",
+      "phase": "GROUP",
+      "group_id": "L",
+      "matchday": 3,
+      "home": "ENG",
+      "away": "PAN"
+    },
+    {
+      "id": "m_L_3_CRO",
+      "phase": "GROUP",
+      "group_id": "L",
+      "matchday": 3,
       "home": "CRO",
-      "away": "AUS"
-    },
-    {
-      "id": "m_K_1_CHI",
-      "phase": "GROUP",
-      "group_id": "K",
-      "matchday": 1,
-      "home": "CHI",
-      "away": "GRE"
-    },
-    {
-      "id": "m_K_2_CRO",
-      "phase": "GROUP",
-      "group_id": "K",
-      "matchday": 2,
-      "home": "CRO",
-      "away": "CHI"
-    },
-    {
-      "id": "m_K_2_GRE",
-      "phase": "GROUP",
-      "group_id": "K",
-      "matchday": 2,
-      "home": "GRE",
-      "away": "AUS"
-    },
-    {
-      "id": "m_K_3_CRO",
-      "phase": "GROUP",
-      "group_id": "K",
-      "matchday": 3,
-      "home": "CRO",
-      "away": "GRE"
-    },
-    {
-      "id": "m_K_3_AUS",
-      "phase": "GROUP",
-      "group_id": "K",
-      "matchday": 3,
-      "home": "AUS",
-      "away": "CHI"
-    },
-    {
-      "id": "m_L_1_URU",
-      "phase": "GROUP",
-      "group_id": "L",
-      "matchday": 1,
-      "home": "URU",
-      "away": "ECU"
-    },
-    {
-      "id": "m_L_1_TUN",
-      "phase": "GROUP",
-      "group_id": "L",
-      "matchday": 1,
-      "home": "TUN",
-      "away": "NZL"
-    },
-    {
-      "id": "m_L_2_URU",
-      "phase": "GROUP",
-      "group_id": "L",
-      "matchday": 2,
-      "home": "URU",
-      "away": "TUN"
-    },
-    {
-      "id": "m_L_2_NZL",
-      "phase": "GROUP",
-      "group_id": "L",
-      "matchday": 2,
-      "home": "NZL",
-      "away": "ECU"
-    },
-    {
-      "id": "m_L_3_URU",
-      "phase": "GROUP",
-      "group_id": "L",
-      "matchday": 3,
-      "home": "URU",
-      "away": "NZL"
-    },
-    {
-      "id": "m_L_3_ECU",
-      "phase": "GROUP",
-      "group_id": "L",
-      "matchday": 3,
-      "home": "ECU",
-      "away": "TUN"
+      "away": "GHA"
     }
   ],
   "knockout": [

@@ -2,109 +2,109 @@
   {
     "id": "A",
     "team_ids": [
-      "ARG",
-      "COL",
-      "AUT",
-      "CMR"
+      "MEX",
+      "RSA",
+      "KOR",
+      "CZE"
     ]
   },
   {
     "id": "B",
     "team_ids": [
-      "FRA",
-      "MAR",
-      "UKR",
-      "GHA"
+      "CAN",
+      "BIH",
+      "QAT",
+      "SUI"
     ]
   },
   {
     "id": "C",
     "team_ids": [
-      "ESP",
-      "USA",
-      "SWE",
-      "CIV"
+      "BRA",
+      "MAR",
+      "HAI",
+      "SCO"
     ]
   },
   {
     "id": "D",
     "team_ids": [
-      "ENG",
-      "MEX",
-      "WAL",
-      "QAT"
+      "USA",
+      "PAR",
+      "AUS",
+      "TUR"
     ]
   },
   {
     "id": "E",
     "team_ids": [
-      "BRA",
-      "SUI",
-      "POL",
-      "KSA"
+      "GER",
+      "CUW",
+      "CIV",
+      "ECU"
     ]
   },
   {
     "id": "F",
     "team_ids": [
-      "POR",
+      "NED",
       "JPN",
-      "SRB",
-      "CRC"
+      "SWE",
+      "TUN"
     ]
   },
   {
     "id": "G",
     "team_ids": [
-      "NED",
-      "SEN",
+      "BEL",
       "EGY",
-      "PAN"
+      "IRN",
+      "NZL"
     ]
   },
   {
     "id": "H",
     "team_ids": [
-      "BEL",
-      "DEN",
-      "NGA",
-      "JAM"
+      "ESP",
+      "CPV",
+      "KSA",
+      "URU"
     ]
   },
   {
     "id": "I",
     "team_ids": [
-      "ITA",
-      "IRN",
-      "CAN",
+      "FRA",
+      "SEN",
+      "IRQ",
       "NOR"
     ]
   },
   {
     "id": "J",
     "team_ids": [
-      "GER",
-      "KOR",
-      "PER",
-      "TUR"
+      "ARG",
+      "ALG",
+      "AUT",
+      "JOR"
     ]
   },
   {
     "id": "K",
     "team_ids": [
-      "CRO",
-      "AUS",
-      "CHI",
-      "GRE"
+      "POR",
+      "COD",
+      "UZB",
+      "COL"
     ]
   },
   {
     "id": "L",
     "team_ids": [
-      "URU",
-      "ECU",
-      "TUN",
-      "NZL"
+      "ENG",
+      "CRO",
+      "GHA",
+      "PAN"
     ]
   }
 ]
